@@ -1,6 +1,6 @@
 import java.sql.*;
 
-class Chairs extends Furniture {
+public class Chairs extends Furniture {
 	private String id;
 	private String type;
 	private String arms;
@@ -39,7 +39,9 @@ class Chairs extends Furniture {
             err.printStackTrace();
 		}
 	}
-	
+	public void calculatePrice () {
+		
+	}
 	public void selectChairs() {
 		try {
 			Statement myStmt = dbConnect.createStatement();
@@ -64,14 +66,8 @@ class Chairs extends Furniture {
 		}
 	}
 	
+ // leave for now. Might get rid later.
 	
-	
-	public String getId() {
-		return this.id;
-	}
-	public String getType() {
-		return this.type;
-	}
 	public String getArms() {
 		return this.arms;
 	}
@@ -81,25 +77,11 @@ class Chairs extends Furniture {
 	public String getCushion() {
 		return this.cushion;
 	}
-	public String getPrice() {
-		return this.price;
-	}
-	public String getMenuID() {
-		return this.menuID;
-	}
+	
 	public String [] getChairInfo() {
 		return this.chairInfo;
 	}
 
-
-	public void setId(String id) {
-		this.id=id;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-	
 	public void setArms(String arms) {
 		this.arms = arms;
 	}
@@ -109,12 +91,7 @@ class Chairs extends Furniture {
 	public void setCushion(String cushion) {
 		this.cushion = cushion;
 	}
-	public void setPrice(String price) {
-		this.price = price;
-	}
-	public void setMenuID(String menuID) {
-		this.menuID = menuID;
-	}
+	
 	public void setChairInfo(String [] chairInfo) {
 		this.chairInfo = chairInfo;
 	}
