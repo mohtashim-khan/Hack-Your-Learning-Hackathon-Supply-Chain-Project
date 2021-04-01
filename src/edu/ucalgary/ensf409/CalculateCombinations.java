@@ -6,6 +6,8 @@
  * @author moto_
  *
  */
+package edu.ucalgary.ensf409;
+
 public class CalculateCombinations {
 
 	/**
