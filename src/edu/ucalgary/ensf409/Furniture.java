@@ -1,3 +1,4 @@
+package edu.ucalgary.ensf409;
 
 abstract class Furniture 
 {
