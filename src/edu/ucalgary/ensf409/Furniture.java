@@ -7,11 +7,21 @@ abstract class Furniture
 	private int price;
 	private String manuID;
 	
-	public abstract void calculatePrice();
+	
+	
+	public Furniture(String iD, String type, int price, String manuID) {
+		
+		this.iD = iD;
+		this.type = type;
+		this.price = price;
+		this.manuID = manuID;
+	}
+
 
 	public String getiD() {
 		return iD;
 	}
+	
 
 	public void setiD(String iD) {
 		this.iD = iD;
