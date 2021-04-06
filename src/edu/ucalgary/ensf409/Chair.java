@@ -5,16 +5,6 @@ public class Chair extends Furniture {
 	private String seat;
 	private String cushion;
 
-	
-	
-
-	
-	//0 arg constructor
-	//need to pull data from SQL database and populate chairInfo array
-	
-	
-// create database class
-	
 	public void selectChairs() {
 		
 	}
