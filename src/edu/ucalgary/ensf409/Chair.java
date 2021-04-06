@@ -11,7 +11,7 @@ public class Chair extends Furniture {
 	
  // leave for now. Might get rid later.
 	
-	public Chair(String iD, String type, int price, String manuID, String arms, String seat, String cushion) {
+	public Chair(String iD, String type, String price, String manuID, String arms, String seat, String cushion) {
 		super(iD, type, price, manuID);
 		// TODO Auto-generated constructor stub
 		this.arms = arms;
