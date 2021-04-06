@@ -4,12 +4,12 @@ abstract class Furniture
 {
 	private String iD;
 	private String type;
-	private int price;
+	private String price;
 	private String manuID;
 	
 	
 	
-	public Furniture(String iD, String type, int price, String manuID) {
+	public Furniture(String iD, String type, String price, String manuID) {
 		
 		this.iD = iD;
 		this.type = type;
@@ -20,6 +20,11 @@ abstract class Furniture
 
 	public String getiD() {
 		return iD;
+	}
+	
+	public double pricetoDouble()
+	{
+		return Double.valueOf(price);
 	}
 	
 
@@ -35,11 +40,11 @@ abstract class Furniture
 		this.type = type;
 	}
 
-	public int getPrice() {
+	public String getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 
