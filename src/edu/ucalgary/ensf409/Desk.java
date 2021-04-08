@@ -19,6 +19,8 @@ public class Desk extends Furniture {
 	private String top;
 	private String drawer;
 
+
+
 	//Constructor
 	public Desk(String iD, String type, String price, String manuID, String legs, String top, String drawer) {
 		super(iD, type, price, manuID);
