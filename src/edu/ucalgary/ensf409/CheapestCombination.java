@@ -36,24 +36,3 @@ public class CheapestCombination {
 	}
 
 }
-
-
-
-class Combination {
-
-    /**
-     * Builds a String for the formatted output to the order-form.txt file
-     * @return String consists of all Furniture objects' IDs and total price in the correct format.
-     */
-    public String getFormat() {
-		StringBuffer format = new StringBuffer();
-		for (Furniture furniture : combination) {
-            format.append("ID: " + furniture.getID());
-			format.append('\n');
-        }
-		format.append("Total Price: " + totalPrice);
-		
-		return format.toString();
-	}
-	
-}
