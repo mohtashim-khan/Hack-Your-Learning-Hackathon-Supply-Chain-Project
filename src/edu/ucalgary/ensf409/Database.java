@@ -27,7 +27,7 @@ public class Database
     	
     	if(!(selectedTable == "chair" || selectedTable == "desk" || selectedTable == "filing" || selectedTable == "lamp"))
     	{
-    		throw new IllegalArgumentException("selectedType is not valid");
+    		throw new IllegalArgumentException("selectedTable is not valid");
     	}
     	
     	
@@ -49,42 +49,49 @@ public class Database
     
     
    //this will get called either in the UI class or the CalculateCombinations class. Will need to test
-    public Object [] getData()
+    public Object [] getData() throws NullPointerException
     {
-    	selectfromDB();
-    	switch(selectedType)
-        {
-        case "chair":
-        	return chairList.toArray();
-        	
-        case "lamp":
-        	return lampList.toArray();
-
-
-        case "filing":
-        	return filingList.toArray();
-
-
-        case "desk":
-        	return deskList.toArray();
-        
-        }
-    	return null;
+    	selectFromDB();
+    	if(selectedTable == "chair")
+    	{
+    	return chairList.toArray();
+    	}
     	
+    	else if(selectedTable == "desk")
+    	{
+    	return deskList.toArray();
+    	}
+   
+    	else if(selectedTable == "lamp")
+    	{
+    	return lampList.toArray();
+    	}
     	
+    	else if(selectedTable == "filing")
+    	{
+    	return filingList.toArray();
+    	}
     	
+    	else
+    	{
+    		throw new NullPointerException("data is empty from getData()");
+    	}
+    	
+    
     }
+    
+	
     
     
     //Extracts the required information from the database and populates the appropriate class ArrayList with the 
     // required values.
-    private void selectfromDB()
+    public void selectFromDB()
     {
     	try {                    
             Statement myStmt = dbConnect.createStatement();
-            results = myStmt.executeQuery("SELECT * FROM "+ selectedTable+"WHERE `Type` = '"+selectedType+"'");
+            results = myStmt.executeQuery("SELECT * FROM "+selectedTable+" WHERE `type` = '"+selectedType+"'");
 
-            switch(selectedType)
+            switch(selectedTable)
             {
             case "chair":
             	while(results.next())
@@ -147,10 +154,11 @@ public class Database
     	
     }
     
-    public void deleteDBentry(String id)
+    //Deletes Database entry in the selected table based on provided iD
+    public void deleteDBEntry(String id)
     {
     	try {
-            String query = "DELETE FROM "+selectedTable+" WHERE id = "+id;
+            String query = "DELETE FROM "+selectedTable+" WHERE id = '"+id+"'";
             PreparedStatement myStmt = dbConnect.prepareStatement(query);
             myStmt.executeUpdate();
             myStmt.close();
@@ -160,6 +168,14 @@ public class Database
         }
     	
     }
+    
+    public PreparedStatement sendQuery(String query) throws SQLException
+    {
+    	return dbConnect.prepareStatement(query);
+    }
+    
+    
+    
     
     public void close() {
         try {

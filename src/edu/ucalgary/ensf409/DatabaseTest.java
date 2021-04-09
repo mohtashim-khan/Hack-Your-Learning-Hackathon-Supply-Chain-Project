@@ -5,6 +5,8 @@ package edu.ucalgary.ensf409;
 
 import static org.junit.Assert.*;
 
+import java.sql.*;
+
 import org.junit.Test;
 
 /**
@@ -29,16 +31,66 @@ public class DatabaseTest {
 	@Test
 	public void testInitConnection() {
 		
+		Connection check;
 		Database test = new Database("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "mesh", "chair");
 		test.initConnection();
+		check = test.getDbConnect();
+		
+		try {
+			assertTrue("Connection is open", check.isValid(0));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	/**
-	 * Test method for {@link edu.ucalgary.ensf409.Database#selectfromDB()}.
+	 * Test method for {@link edu.ucalgary.ensf409.Database#testgetData()}.
 	 */
 	@Test
-	public void testSelectfromDB() {
-		fail("Not yet implemented");
+	public void testgetData() {
+		Object [] dataArray;
+		String expectedType = "Mesh";
+		
+		Database test = new Database("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "mesh", "chair");
+		test.initConnection();
+		dataArray = test.getData();
+		assertEquals(expectedType, ((Chair) dataArray[0]).getType());
+		
 	}
+	
+	/**
+	 * Test method for {@link edu.ucalgary.ensf409.Database#testgetData()}.
+	 */
+	@Test
+	public void testdeleteDBentry()
+	{
+		Object [] initialArray;
+		Object [] deletedEntryArray;
+		Database test = new Database("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "mesh", "chair");
+		test.initConnection();
+		
+		  try {
+		  
+		  String query ="INSERT INTO chair ( ID, Type, Legs, Arms, Seat, Cushion, Price, ManuID) VALUES ('test','Mesh','Y','N','Y','Y','100','005')"; 
+		  PreparedStatement myStmt = test.sendQuery(query); 
+		  myStmt.executeUpdate();
+		  myStmt.close();
+		  
+		  } catch (SQLException ex) { 
+			  ex.printStackTrace();
+			  }
+		 
+		initialArray = test.getData();
+		test.deleteDBEntry("test");
+		deletedEntryArray = test.getData();
+		assertNotEquals(((Chair) deletedEntryArray[deletedEntryArray.length-1]).getiD(),((Chair) initialArray[initialArray.length-1]).getiD());
+		
+		
+	}
+	
+	
 
 }
