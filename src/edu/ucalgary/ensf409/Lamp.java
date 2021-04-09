@@ -32,6 +32,28 @@ public class Lamp extends Furniture {
 	public String getBase() {
 		return this.base;
 	}
+	
+	//returns 1 if base == "Y" 0 otherwise
+	public int getBaseInt() {
+		if(this.base == "Y")
+		return 1;
+		else
+		{
+			return 0;
+		}
+	}
+	
+	//returns 1 if bulb == "Y" 0 otherwise
+	public int getBulbInt()
+	{
+		if(this.bulb == "Y")
+			return 1;
+			else
+			{
+				return 0;
+			}
+	}
+	
 	//Getter
 	public String getBulb() {
 		return this.bulb;

@@ -58,7 +58,7 @@ public class CalculateCombinations {
             local.add(A.get(i));
 
             // recursive call
-            uniqueCombinationLamp(i+1, sum1 + A.get(i).getBase(), sum2 + A.get(i).getBulb(), quantity, local, A);
+            uniqueCombinationLamp(i+1, sum1 + A.get(i).getBaseInt(), sum2 + A.get(i).getBulbInt(), quantity, local, A);
 
             // Remove element from the combination
             local.remove(local.size() - 1);
