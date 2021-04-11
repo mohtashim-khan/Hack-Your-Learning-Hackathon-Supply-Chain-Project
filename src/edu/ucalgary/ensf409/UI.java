@@ -29,6 +29,7 @@ public class UI {
 	
 	private Object [] sqlDataStorage; // generic object array, will be filled with all necessary line items from data tables
 	private Object [] completedOrder; // filled with contents from cheapestCombinations
+	private String[] usedIDs;	//String of the IDs used to make the new item for the user, will need to remove these IDs from the Database
 	
 	private ArrayList<Chair> chairStorage;         // added for now. Need to decide if we're using arrayLists or Object []
 	private ArrayList<Desk> deskStorage;  			// added for now. Need to decide if we're using arrayLists or Object []
@@ -113,7 +114,18 @@ public class UI {
 	public void processOrder() {
 		Database myOrder = new Database (DBURL, username, password, type, item); //
 		sqlDataStorage = myOrder.getData(); // ex. all mesh chair line items from table stored in array list
+		myOrder.close();
     }
+	
+	public void deleteUsedIDs()
+	{
+		Database myOrder = new Database (DBURL, username, password, type, item);
+		for(int i =0; i< usedIDs.length; i++)
+		{
+			myOrder.deleteDBEntry(usedIDs[i]);
+		}
+		myOrder.close();
+	}
 	
 	/*calculateOrder
 	 *Gives object [] of SQL line item to cheapestCombinations Class.
@@ -125,20 +137,22 @@ public class UI {
 		int quanityNum = strToInt();
 		//use if statements to generate all combos for furniture items
 		if(item =="chair") {
-			findResults.findAllCombinationsChair(chairStorage, quanityNum);
+			findResults.findAllCombinationsChair(sqlDataStorage, quanityNum);
 		}
 		
 		if(item == "desk") {
-			findResults.findAllCombinationsDesk(deskStorage, quanityNum);
+			findResults.findAllCombinationsDesk(sqlDataStorage, quanityNum);
 			
 		}
 		if(item == "filing") {
-			findResults.findAllCombinationsFiling(filingStorage, quanityNum);
+			findResults.findAllCombinationsFiling(sqlDataStorage, quanityNum);
 			
 		}
 		if(item == "lamp") {
-			findResults.findAllCombinationsLamp(lampStorage, quanityNum);			
+			findResults.findAllCombinationsLamp(sqlDataStorage, quanityNum);			
 		}
+		
+		usedIDs = findResults.getResult();
 	}
 	
 	/*displayOrder
@@ -189,7 +203,7 @@ public class UI {
 		
     	bigString.append("Furniture Order Form \n\n");
     	bigString.append("Faculty Name: \n");
-    	bigString.append("Cantact: \n");
+    	bigString.append("Contact: \n");
     	bigString.append("Date: \n\n");
     	bigString.append("Original Request: " + type + " " + item + "," + quanity + "\n\n");
     	
@@ -198,12 +212,13 @@ public class UI {
     	bigString.append("ID: " + "chairCode2"+ "\n"); // need furniture code class to store codes
     	
     	bigString.append("Total Price: $150"); // price is hard-coded for now (example).
+    	System.out.println(bigString.toString());
     	return bigString.toString();
 	}
 		
 	public static void main(String[] args) {
 		
-			//prompts user to enter their order request in the form of type item, quantity 
+			//prompts user to enter their order request in the form of type item, quantity 	
 			Scanner sc= new Scanner(System.in);  
 			try {
 				System.out.print("Please enter your order request (type item, quanity): \n");  
@@ -225,6 +240,7 @@ public class UI {
 				newOrder.processOrder(); 
 				newOrder.calculateOrder();
 				newOrder.displayOrder();
+				newOrder.deleteUsedIDs();
 			}
 	    	finally {
 	    		sc.close();
