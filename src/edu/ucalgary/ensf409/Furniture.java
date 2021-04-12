@@ -30,6 +30,16 @@ abstract class Furniture {
 		this.manuID = manuID;
 	}
 	
+	//Important method for getting int values for Y/N things from furniture databases
+	public int getIntFromYorN(String a){
+		if(a.equals("Y")){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
+
 	//Getter
 	public String getiD() {
 		return iD;
@@ -44,6 +54,12 @@ abstract class Furniture {
 	public String getPrice() {
 		return price;
 	}
+
+	//Get Price as Int value
+	public int getPriceInt(){
+		return Integer.parseInt(this.price);
+	}
+	
 	//Getter
 	public String getType() {
 		return type;

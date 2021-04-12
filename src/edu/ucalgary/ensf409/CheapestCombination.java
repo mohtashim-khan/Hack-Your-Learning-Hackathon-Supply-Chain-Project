@@ -13,26 +13,57 @@ public class CheapestCombination {
     public CheapestCombination(ArrayList<Furniture> comb) {
         this.combination = comb;
         for (Furniture furniture : comb){
-            totalPrice += furniture.getPRICE();
+            totalPrice += furniture.getPriceInt();
         }
     }
 
     public void print() {
         for (Furniture furniture : combination) {
-            System.out.println(furniture.getID());
+            System.out.println(furniture.getiD());
         }
         System.out.println("Total Price: $" + totalPrice);
     }
 
     public String getFormat() {
-		StringBuffer format = new StringBuffer();
+		StringBuilder ret = new StringBuilder();
 		for (Furniture furniture : combination) {
-            format.append("ID: " + furniture.getID());
-			format.append('\n');
+            ret.append("ID: " + furniture.getiD() + '\n');
         }
-		format.append("Total Price: " + totalPrice);
-		
-		return format.toString();
+		ret.append("Total Price: " + totalPrice);
+		return ret.toString();
+	}
+    
+    public ArrayList<Furniture> getCombination()
+    {
+    	return this.combination;
+    	
+    }
+    
+    public String [] getIDs()
+    {
+    	String [] returnStringArray = new String [combination.size()];
+    	for(int i = 0; i<combination.size();i++)
+    	{
+    	returnStringArray[i] = combination.get(i).getiD();
+    	}
+    	
+    	return returnStringArray;
+    }
+
+	/**
+	 * @return the totalPrice
+	 */
+	public int getTotalPrice() {
+		return totalPrice;
 	}
 
+	/**
+	 * @param totalPrice the totalPrice to set
+	 */
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+    
+    
 }
+//end of class declaration

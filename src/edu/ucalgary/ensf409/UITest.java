@@ -32,11 +32,27 @@ public class UITest {
 	    				   testObj.getQuanity() +
 	    				   testObj.getDBURLType() +
 	    				   testObj.getUsername ();
+	    
+	    assertEquals(expResult,"test string, 1"+"DBURLTest"+"usernameTest"+"passwordTest");
 	    				   
 
 	    // See if the arrays are the same
 	  //  assertTrue("Constructor test has failed", Arrays.equals(,));
 	  }
+	
+	@Test
+	public void testCalculateOrder()
+	{
+		UI testObj = new UI("study lamp, 3", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
+		testObj.processOrder();
+		testObj.calculateOrder();
+		String[] result = testObj.getUsedIDs();
+		String[] expected = {"L980", "L982"};
+		assertEquals(Arrays.toString(expected),Arrays.toString(result));
+	}
+	
 
 
 }
+
+

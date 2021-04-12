@@ -16,6 +16,7 @@ package edu.ucalgary.ensf409;
 public class Chair extends Furniture {
 	
 	//Class variables
+	private String legs;
 	private String arms;
 	private String seat;
 	private String cushion;
@@ -24,14 +25,30 @@ public class Chair extends Furniture {
 	public Chair(String iD, String type, String price, String manuID, String arms, String seat, String cushion) {
 		super(iD, type, price, manuID);
 		// TODO Auto-generated constructor stub
+		this.legs = legs;
 		this.arms = arms;
 		this.seat = seat;
 		this.cushion = cushion;
 	}
-	
+
+	//Getter
+	public String getLegs() {
+		return this.legs;
+	}
+
+	//returns 1 if legs == "Y" 0 otherwise
+	public int getLegsInt() {
+		return getIntFromYorN(this.legs);
+	}
+
 	//Getter
 	public String getArms() {
 		return this.arms;
+	}
+		
+	//returns 1 if arms == "Y" 0 otherwise
+	public int getArmsInt() {
+		return getIntFromYorN(this.arms);
 	}
 	
 	//Getter
@@ -39,11 +56,26 @@ public class Chair extends Furniture {
 		return this.seat;
 	}
 	
+	//returns 1 if seat == "Y" 0 otherwise
+	public int getSeatInt() {
+		return getIntFromYorN(this.seat);
+	}
+	
 	//Getter
 	public String getCushion() {
 		return this.cushion;
 	}
-	
+		
+	//returns 1 if cushion == "Y" 0 otherwise
+	public int getCushionInt() {
+		return getIntFromYorN(this.cushion);
+	}
+
+	//Setter
+	public void setLegs(String legs) {
+		this.legs = legs;
+	}
+
 	//Setter
 	public void setArms(String arms) {
 		this.arms = arms;

@@ -25,16 +25,10 @@ public class UI {
 	private String type; // mesh
 	private String item; // chair
 	private String quanity; // 1
-	private String totalPrice; // This will be the total price of the order
+	private int totalPrice; // This will be the total price of the order
 	
 	private Object [] sqlDataStorage; // generic object array, will be filled with all necessary line items from data tables
-	private Object [] completedOrder; // filled with contents from cheapestCombinations
 	private String[] usedIDs;	//String of the IDs used to make the new item for the user, will need to remove these IDs from the Database
-	
-	private ArrayList<Chair> chairStorage;         // added for now. Need to decide if we're using arrayLists or Object []
-	private ArrayList<Desk> deskStorage;  			// added for now. Need to decide if we're using arrayLists or Object []
-	private ArrayList<Filing> filingStorage; 	 // added for now. Need to decide if we're using arrayLists or Object []
-	private ArrayList<Lamp> lampStorage;		// added for now. Need to decide if we're using arrayLists or Object []
 	
 	public final String DBURL;
 	public final String username;
@@ -52,6 +46,8 @@ public class UI {
 		String [] temp = first.split(" ",3 );
 		type = temp [0];
 		item = temp [1].substring(0,temp[1].length()-1);
+		System.out.println(item);
+		
 		quanity = temp [2];
 	
 		DBURL = second;
@@ -100,6 +96,22 @@ public class UI {
 		this.quanity = quanity;
 	}
 	
+	
+	
+	/**
+	 * @return the usedIDs
+	 */
+	public String[] getUsedIDs() {
+		return usedIDs;
+	}
+
+	/**
+	 * @param usedIDs the usedIDs to set
+	 */
+	public void setUsedIDs(String[] usedIDs) {
+		this.usedIDs = usedIDs;
+	}
+
 	//str to int conversion
 	public int strToInt() {
 		int rst =Integer.parseInt(quanity);
@@ -112,14 +124,15 @@ public class UI {
 	 *Gives information of order details to dataBase SQL class.
 	 */
 	public void processOrder() {
-		Database myOrder = new Database (DBURL, username, password, type, item); //
+		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "study", "lamp"); // NEED TO FIX THE HARDCODING
+		myOrder.initConnection();
 		sqlDataStorage = myOrder.getData(); // ex. all mesh chair line items from table stored in array list
 		myOrder.close();
     }
 	
 	public void deleteUsedIDs()
 	{
-		Database myOrder = new Database (DBURL, username, password, type, item);
+		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "study", "lamp"); // NEED TO FIX THE HARDCODING
 		for(int i =0; i< usedIDs.length; i++)
 		{
 			myOrder.deleteDBEntry(usedIDs[i]);
@@ -137,22 +150,23 @@ public class UI {
 		int quanityNum = strToInt();
 		//use if statements to generate all combos for furniture items
 		if(item =="chair") {
-			findResults.findAllCombinationsChair(sqlDataStorage, quanityNum);
+			//findResults.findChairCombinations(sqlDataStorage, quanityNum); -- UNCOMMENT
 		}
 		
 		if(item == "desk") {
-			findResults.findAllCombinationsDesk(sqlDataStorage, quanityNum);
+			//findResults.findDeskCombinations(sqlDataStorage, quanityNum);-- UNCOMMENT
 			
 		}
 		if(item == "filing") {
-			findResults.findAllCombinationsFiling(sqlDataStorage, quanityNum);
+			//findResults.findFilingCombinations(sqlDataStorage, quanityNum);-- UNCOMMENT
 			
 		}
-		if(item == "lamp") {
-			findResults.findAllCombinationsLamp(sqlDataStorage, quanityNum);			
-		}
+		//if(item == "lamp") { -- UNCOMMENT
+			findResults.findLampCombinations(sqlDataStorage, quanityNum);			
+		//}
+		usedIDs = findResults.getusedIDs();
+		totalPrice = findResults.getTotalPrice();
 		
-		usedIDs = findResults.getResult();
 	}
 	
 	/*displayOrder
@@ -207,11 +221,19 @@ public class UI {
     	bigString.append("Date: \n\n");
     	bigString.append("Original Request: " + type + " " + item + "," + quanity + "\n\n");
     	
-    	bigString.append("Items Ordered \n");
-    	bigString.append("ID: " + "chairCode1"+ "\n"); // need furniture code class to store codes
-    	bigString.append("ID: " + "chairCode2"+ "\n"); // need furniture code class to store codes
+    	bigString.append("Items Ordered :\n");
+    	if(usedIDs == null)
+    	{
+    		bigString.append("ORDER COULD NOT BE FULFILLED");
+    	}
+    	else {
+    	for(int i = 0; i<usedIDs.length; i++)
+    	{
+    		bigString.append("ID: " + usedIDs[i]+ "\n"); // need furniture code class to store codes
+    	}
     	
-    	bigString.append("Total Price: $150"); // price is hard-coded for now (example).
+    	bigString.append("Total Price: $"+totalPrice); // price is hard-coded for now (example).
+    	}
     	System.out.println(bigString.toString());
     	return bigString.toString();
 	}
@@ -237,6 +259,7 @@ public class UI {
 				//create new UI object and pass in all user input
 				UI newOrder = new UI(storage1, storage2, storage3, storage4);
 		
+				
 				newOrder.processOrder(); 
 				newOrder.calculateOrder();
 				newOrder.displayOrder();
