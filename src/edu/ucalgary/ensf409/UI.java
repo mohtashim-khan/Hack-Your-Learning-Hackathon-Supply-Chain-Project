@@ -164,7 +164,7 @@ public class UI {
 		//if(item == "lamp") { -- UNCOMMENT
 			findResults.findLampCombinations(sqlDataStorage, quanityNum);			
 		//}
-		usedIDs = findResults.getusedIDs();
+		usedIDs = findResults.getBestCombIDs();
 		totalPrice = findResults.getTotalPrice();
 		
 	}
