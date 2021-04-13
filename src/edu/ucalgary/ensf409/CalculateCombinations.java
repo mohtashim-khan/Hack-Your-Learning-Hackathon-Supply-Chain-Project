@@ -1,187 +1,366 @@
+/**
+ *@author	Group 73 (Mackenzie,Mohtashim, Ritwik, Usman) <a>
+ *href="mailto:mohtashim.khan@ucalgary.ca">mohtashim.khan@ucalgary.ca</a>
+ *Project Manager: Mohtashim Khan
+ *@version 1.0
+ *@since 1.0
+ *
+ *CalculateCombinations is a class that finds all combinations and 
+ *outputs the cheapest one
+ */
+
+
+// The best combination is the cheapest Combination
+// CheapestCombination in the code BELOW represents one combination (not necessarily cheapest)
+// the bestCombination method looks through the ArrayList of CheapestCombinations to find the bestCombination
 
 package edu.ucalgary.ensf409;
 import java.util.*;
 import java.sql.*;
 
 public class CalculateCombinations {
-	public ArrayList<CheapestCombination> result;
 
-	//constructor
+	//This Array List contains all the combinations
+	private ArrayList<CheapestCombination> allCombinations;
+	private int totalPrice = 0;
+
+	
+	//Constructor
 	public CalculateCombinations() {
-        result = new ArrayList<>();
+        allCombinations = new ArrayList<>();
     }
 
+    //getter
+	public ArrayList<CheapestCombination> getAllCombinations() {
+        return allCombinations;
+    }
+	
+    //getter
+    public int getTotalPrice(){
+		return this.totalPrice;
+	}
 
-	public CheapestCombination bestCombination (){
-        if (this.result.isEmpty()){
+	// This is a getter for the ID's of the Cheapest Combination
+	public String [] getBestCombIDs(){
+		CheapestCombination outBestComb = bestCombination();
+		String [] returnStringArray;
+		try {
+			totalPrice = outBestComb.getTotalPrice();
+			returnStringArray = outBestComb.getIDs();
+		}
+		catch(NullPointerException e)
+		{
+			totalPrice = 0;
+			returnStringArray = null;
+		}
+		return returnStringArray;
+	}
+
+    //finds the Cheapest Combinations from allCombinations
+	public CheapestCombination bestCombination(){
+        if (this.allCombinations.isEmpty()){
             return null;
         }
-        CheapestCombination best = null;
-        for (CheapestCombination current : this.result){
-            if (best == null){
-                best = current;
+
+        CheapestCombination bestComb = null;
+        
+		// This traverses all combinations from the allCombination array and finds the combination with the cheapest totalPrice 
+        
+		for (int i = 0; i < this.allCombinations.size(); i++){
+            if (bestComb == null){
+                bestComb = this.allCombinations.get(i);
             }
-            if(current.totalPrice < best.totalPrice){
-                best = current;
+            if(this.allCombinations.get(i).totalPrice < bestComb.totalPrice){
+                bestComb = this.allCombinations.get(i);
             }
         }
-        return best;
+        return bestComb; // returns the cheapest combination
+    }
+    
+
+	// Generic methods - public void find <T> - USMAN 
+    // This find<item>Combinations method is the driver class for recursion 
+	public void findLampCombinations(Object[] lampObjectList, int quantity){
+        // Type cast the returned Object[] to the required Array List type
+		ArrayList<Lamp> lampList = new ArrayList<>();
+        for(int i = 0; i < lampObjectList.length; i++){
+            lampList.add((Lamp) lampObjectList[i]);                               
+        }
+
+		//This locallist will contain all combinations that fullfill the order!
+        ArrayList<Lamp> localList = new ArrayList<>();                        
+		
+		//starts the recursion - Bang!
+        bestLampCombination(0, 0, 0, quantity, localList, lampList);
     }
 
+	/**
+	 * This method "populates" all the combinations that fulfill the requested # of orders aka "Best Combination"
+	 * @param index - Recursion increment 
+	 * @param baseLocInt - Subitem must reach the order quantity
+	 * @param bulbLocInt - Subitem must reach the order quantity
+	 * @param quantity - Number of orders to be placed 
+	 * @param localList - explained below
+	 * @param lampList - The array of all Lamps in the current Data Base
+	 * 
+	 * (Simple explanation)
+	 * localist is a temp list used to add and remove individual lamps, thus creating a "Potential" combination.
+	 * Now if the locallist was a successful combination, it will add those "lamps" from the local list into winnerComb list so that we do not 
+	 * loose track of a winner
+	 *
+	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * 
+	 * (Deeper Explanation)
+	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
+	 * combinations to test that!
+	 */
+	public void bestLampCombination(int index, int baseLocInt, int bulbLocInt, int quantity, ArrayList<Lamp> localList, ArrayList<Lamp> lampList){
+        // Base Case for recursion - Checks if quantities are met, if met then add to daddy List 
+		if (baseLocInt >= quantity && bulbLocInt >= quantity){  
+			// This is a type cast because we need to construct a CheapestCombination class!!
+			ArrayList<Furniture> winnerComb = new ArrayList<>();
+			for(int i=0; i < localList.size(); i++){
+				winnerComb.add((Furniture) localList.get(i));
+			}
+			this.allCombinations.add(new CheapestCombination(winnerComb));
+            return;
+		}
 
-	public void findAllCombinationsLamp (ArrayList<Lamp> arr, int quantity){
-        Vector<Lamp> A = new Vector<>(arr);
-        Vector<Lamp> local = new Vector<>();
+        // This loop is an iteration of recursion 
+        for (int i = index; i < lampList.size(); i++){
+            // check if lamp is being repeated in lampList
+            if (i > index && lampList.get(i) == lampList.get(i-1)){
+                continue; // skip this increment
+            }
 
-        uniqueCombinationLamp(0, 0, 0, quantity, local, A);
+            // adding the next lamp into the temp array "localList"
+            localList.add(lampList.get(i));
+
+            // recursive call
+            int baseArg = baseLocInt + lampList.get(i).getBaseInt();
+            int bulbArg = bulbLocInt + lampList.get(i).getBulbInt();
+            int newIndex = i+1;
+            bestLampCombination(newIndex, baseArg, bulbArg, quantity, localList, lampList);
+
+            // Remove the last Lamp from the "localList" - AKA Backtracking 
+            localList.remove(localList.size() - 1);
+        }
     }
 
 	
-	public void uniqueCombinationLamp(int l, int sum1, int sum2, int quantity, Vector<Lamp> local, Vector<Lamp> A){
-        if (sum1 >= quantity && sum2 >= quantity){              // if bases and bulbs found are at least the quantity
-            ArrayList<Furniture> comb = new ArrayList<>();
-            for (Lamp lamp : local) {
-                comb.add((Furniture) lamp);
-            }
-            this.result.add(new CheapestCombination(comb));             // adding the newly created Furniture Object to the result data member
-            return;
+	// This find<item>Combinations method is the driver class for recursion 
+	public void findChairCombinations (Object[] chairObjectList, int quantity) {
+        // Type cast the returned Object[] to the required Array List type
+		ArrayList<Chair> chairList = new ArrayList<>();
+        for(int i = 0; i < chairObjectList.length; i++){
+            chairList.add((Chair) chairObjectList[i]);                               
         }
 
-        // add another Lamp from A to local to check.
-        for (int i = l; i < A.size(); i++){
-            // check if the current Lamp is repeated or not
-            if (i > l && A.get(i) == A.get(i-1)){
-                continue; // skip this increment
-            }
+		//This locallist will contain all combinations that fullfill the order!
+        ArrayList<Chair> localList = new ArrayList<>();  
 
-            // adding the next Lamp into local
-            local.add(A.get(i));
-
-            // recursive call
-            uniqueCombinationLamp(i+1, sum1 + A.get(i).getBaseInt(), sum2 + A.get(i).getBulbInt(), quantity, local, A);
-
-            // Remove element from the combination
-            local.remove(local.size() - 1);
-        }
+        //starts the recursion
+        bestChairCombination(0, 0, 0, 0, 0, quantity, localList, chairList);
     }
 
 
-	public void findAllCombinationsChair (ArrayList<Chair> arr, int quantity) {
-        Vector<Chair> A = new Vector<>(arr);
-        Vector<Chair> local = new Vector<>();
-
-        uniqueCombinationChair(0, 0, 0, 0, 0, quantity, local, A);
-    }
-
-
-	public void uniqueCombinationChair(int l, int sum1, int sum2, int sum3, int sum4, int quantity, Vector<Chair> local, Vector<Chair> A) {
-        if (sum1 >= quantity && sum2 >= quantity && sum3 >= quantity && sum4 >= quantity) {
-            ArrayList<Furniture> comb = new ArrayList<>();
-            for (Chair chair : local) {
-                comb.add((Furniture) chair);
+    /**
+	 * This method "populates" all the combinations that fulfill the requested # of orders aka "Best Combination"
+	 * @param index - Recursion increment 
+	 * @param legsLocInt - Subitem must reach the order quantity
+	 * @param armsLocInt - Subitem must reach the order quantity
+     * @param seatLocInt - Subitem must reach the order quantity
+     * @param cushionLocInt - Subitem must reach the order quantity
+	 * @param quantity - Number of orders to be placed 
+	 * @param localList - explained below
+	 * @param chairList - The array of all Chairs in the current Data Base
+	 * 
+	 * (Simple explanation)
+	 * localist is a temp list used to add and remove individual chairs, thus creating a "Potential" combination.
+	 * Now if the locallist was a successful combination, it will add those "chairs" from the local list into winnerComb list so that we do not 
+	 * loose track of a winner
+	 *
+	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * 
+	 * (Deeper Explanation)
+	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
+	 * combinations to test that!
+	 */
+	public void bestChairCombination(int index, int legsLocInt, int armsLocInt, int seatLocInt, int cushionLocInt, int quantity, ArrayList<Chair> localList, ArrayList<Chair> chairList) {
+        // Base Case for recursion - Checks if quantities are met, if met then add to daddy List
+        if (legsLocInt >= quantity && armsLocInt >= quantity && seatLocInt >= quantity && cushionLocInt >= quantity) {
+            // This is a type cast because we need to construct a CheapestCombination class!!
+            ArrayList<Furniture> winnerComb = new ArrayList<>();
+            for (int i = 0; i < localList.size(); i++) {
+                winnerComb.add((Furniture) localList.get(i));
             }
-            this.result.add(new CheapestCombination(comb));         // adding the newly created Furniture Object to the result data member
+            this.allCombinations.add(new CheapestCombination(winnerComb));
             return;
         }
 
-        // add another Chair from A to local to check.
-        for (int i = l; i < A.size(); i++){
+        // This loop is an iteration of recursion
+        for (int i = index; i < chairList.size(); i++){
             // check if the current Chair is repeated or not
-            if (i > l && A.get(i) == A.get(i-1)){
+            if (i > index && chairList.get(i) == chairList.get(i-1)){
                 continue; // skip this increment
             }
 
-            // adding the next Chair into local
-            local.add(A.get(i));
+            // adding the next chair into the temp array "localList"
+            localList.add(chairList.get(i));
 
             // recursive call
-            uniqueCombinationChair(i+1, sum1 + A.get(i).getLegs(), sum2 + A.get(i).getArms(),
-                    sum3 + A.get(i).getSeat(), sum4 + A.get(i).getCushion(), quantity, local, A);
+            int newIndex = i + 1;
+            int legsArg = legsLocInt + chairList.get(i).getLegsInt();
+            int armsArg = armsLocInt + chairList.get(i).getArmsInt();
+            int seatArg = seatLocInt + chairList.get(i).getSeatInt();
+            int cushionArg = cushionLocInt + chairList.get(i).getCushionInt();
+            bestChairCombination(newIndex, legsArg, armsArg, seatArg, cushionArg, quantity, localList, chairList);
 
-            // Remove element from the combination
-            local.remove(local.size() - 1);
+            // Remove the last Lamp from the "localList" - AKA Backtracking
+            localList.remove(localList.size() - 1);
         }
     }
 
 
-	public void findAllCombinationsDesk (ArrayList<Desk> arr, int quantity) {
-        Vector<Desk> A = new Vector<>(arr);
-        Vector<Desk> local = new Vector<>();
+    // This find<item>Combinations method is the driver class for recursion
+	public void findDeskCombinations(Object[] deskObjList, int quantity) {
+        // Type cast the returned Object[] to the required Array List type
+        ArrayList<Desk> deskList = new ArrayList<>();
+        for(int i = 0; i < deskObjList.length; i++){
+            deskList.add((Desk) deskObjList[i]);
+        }
 
-        uniqueCombinationDesk(0, 0, 0, 0, quantity, local, A);
+        //This locallist will contain all combinations that fullfill the order!
+        ArrayList<Desk> localList = new ArrayList<>();
+
+        //starts the recursion
+        bestDeskCombination(0, 0, 0, 0, quantity, localList, deskList);
     }
 
 
-	public void uniqueCombinationDesk(int l, int sum1, int sum2, int sum3, int quantity, Vector<Desk> local, Vector<Desk> a) {
-        if (sum1 >= quantity && sum2 >= quantity && sum3 >= quantity) {
-            ArrayList<Furniture> comb = new ArrayList<>();
-            for (Desk desk : local) {
-                comb.add((Furniture) desk);
+    /**
+	 * This method "populates" all the combinations that fulfill the requested # of orders aka "Best Combination"
+	 * @param index - Recursion increment 
+	 * @param legsLocInt - Subitem must reach the order quantity
+	 * @param topLocInt - Subitem must reach the order quantity
+     * @param drawerLocInt - Subitem must reach the order quantity
+	 * @param quantity - Number of orders to be placed 
+	 * @param localList - explained below
+	 * @param deskList - The array of all Desks in the current Data Base
+	 * 
+	 * (Simple explanation)
+	 * localist is a temp list used to add and remove individual desks, thus creating a "Potential" combination.
+	 * Now if the locallist was a successful combination, it will add those "desks" from the local list into winnerComb list so that we do not 
+	 * loose track of a winner
+	 *
+	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * 
+	 * (Deeper Explanation)
+	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
+	 * combinations to test that!
+	 */
+	public void bestDeskCombination(int index, int legsLocInt, int topLocInt, int drawerLocInt, int quantity, ArrayList<Desk> localList, ArrayList<Desk> deskList) {
+        // Base Case for recursion - Checks if quantities are met, if met then add to daddy List
+        if (legsLocInt >= quantity && topLocInt >= quantity && drawerLocInt >= quantity) {
+            // This is a type cast because we need to construct a CheapestCombination class!!
+            ArrayList<Furniture> winnerComb = new ArrayList<>();
+            for (int i = 0; i < localList.size(); i++) {
+                winnerComb.add((Furniture) localList.get(i));
             }
-            this.result.add(new CheapestCombination(comb));         // adding the newly created Furniture Object to the result data member
+            this.allCombinations.add(new CheapestCombination(winnerComb));         
             return;
         }
 
-        // add another Desk from A to local to check.
-        for (int i = l; i < a.size(); i++){
+        // This loop is an iteration of recursion
+        for (int i = index; i < deskList.size(); i++){
             // check if the current Desk is repeated or not
-            if (i > l && a.get(i) == a.get(i-1)){
+            if (i > index && deskList.get(i) == deskList.get(i-1)){
                 continue; // skip this increment
             }
 
-            // adding the next Desk into local
-            local.add(a.get(i));
+            // adding the next desk into the temp array "localList"
+            localList.add(deskList.get(i));
 
             // recursive call
-            uniqueCombinationDesk(i+1, sum1 + a.get(i).getLegs(), sum2 + a.get(i).getTop(),
-                    sum3 + a.get(i).getDrawer(), quantity, local, a);
+            int legsArg = legsLocInt + deskList.get(i).getLegsInt();
+            int topArg = topLocInt + deskList.get(i).getTopInt();
+            int drawerArg = drawerLocInt + deskList.get(i).getDrawerInt();
+            bestDeskCombination(i+1, legsArg,topArg, drawerArg, quantity, localList, deskList);
 
-            // Remove element from the combination
-            local.remove(local.size() - 1);
+            // Remove the last Lamp from the "localList" - AKA Backtracking
+            localList.remove(localList.size() - 1);
         }
     }
 
 
-	public void findAllCombinationsFiling (ArrayList<Filing> arr, int quantity) {
-        Vector<Filing> A = new Vector<>(arr);
-        Vector<Filing> local = new Vector<>();
+    // This find<item>Combinations method is the driver class for recursion
+	public void findFilingCombinations (Object[] filingObjList, int quantity) {
+        // Type cast the returned Object[] to the required Array List type
+        ArrayList<Filing> filingList = new ArrayList<>();
+        for(int i = 0; i < filingObjList.length; i++){
+            filingList.add((Filing) filingObjList[i]);
+        }
 
-        uniqueCombinationFiling(0, 0, 0, 0, quantity, local, A);
+        //This locallist will contain all combinations that fullfill the order!
+        ArrayList<Filing> localList = new ArrayList<>();
+
+        //starts the recursion
+        bestFilingCombination(0, 0, 0, 0, quantity, localList, filingList);
     }
 
 
-	public void uniqueCombinationFiling(int l, int sum1, int sum2, int sum3, int quantity, Vector<Filing> local, Vector<Filing> a) {
-        if (sum1 >= quantity && sum2 >= quantity && sum3 >= quantity) {
-            ArrayList<Furniture> comb = new ArrayList<>();
-            for (Filing filing : local) {
-                comb.add((Furniture) filing);
+    /**
+	 * This method "populates" all the combinations that fulfill the requested # of orders aka "Best Combination"
+	 * @param index - Recursion increment 
+	 * @param railsLocInt - Subitem must reach the order quantity
+	 * @param drawersLocInt - Subitem must reach the order quantity
+     * @param cabinetLocInt - Subitem must reach the order quantity
+	 * @param quantity - Number of orders to be placed 
+	 * @param localList - explained below
+	 * @param filingList - The array of all filing in the current Data Base
+	 * 
+	 * (Simple explanation)
+	 * localist is a temp list used to add and remove individual filings, thus creating a "Potential" combination.
+	 * Now if the locallist was a successful combination, it will add those "filings" from the local list into winnerComb list so that we do not 
+	 * loose track of a winner
+	 *
+	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * 
+	 * (Deeper Explanation)
+	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
+	 * combinations to test that!
+	 */
+	public void bestFilingCombination(int index, int railsLocInt, int drawersLocInt, int cabinetLocInt, int quantity, ArrayList<Filing> localList, ArrayList<Filing> filingList){
+        // Base Case for recursion - Checks if quantities are met, if met then add to daddy List
+        if (railsLocInt >= quantity && drawersLocInt >= quantity && cabinetLocInt >= quantity){
+            // This is a type cast because we need to construct a CheapestCombination class!!
+            ArrayList<Furniture> winnerComb = new ArrayList<>();
+            for (int i = 0; i < localList.size(); i++) {
+                winnerComb.add((Furniture) localList.get(i));
             }
-            this.result.add(new CheapestCombination(comb));         // adding the newly created Furniture Object to the result data member
+            this.allCombinations.add(new CheapestCombination(winnerComb));         
             return;
         }
 
-        // add another Desk from A to local to check.
-        for (int i = l; i < a.size(); i++){
+        // This loop is an iteration of recursion
+        for (int i = index; i < filingList.size(); i++){
             // check if the current Desk is repeated or not
-            if (i > l && a.get(i) == a.get(i-1)){
+            if (i > index && filingList.get(i) == filingList.get(i-1)){
                 continue; // skip this increment
             }
 
-            // adding the next Desk into local
-            local.add(a.get(i));
+            // adding the next filing into the temp array "localList"
+            localList.add(filingList.get(i));
 
             // recursive call
-            uniqueCombinationFiling(i+1, sum1 + a.get(i).getRails(), sum2 + a.get(i).getDrawers(),
-                    sum3 + a.get(i).getCabinet(), quantity, local, a);
+            int newIndex = i+1;
+            int railsArg = railsLocInt + filingList.get(i).getRailsInt();
+            int drawersArg = drawersLocInt + filingList.get(i).getDrawersInt();
+            int cabinetArg = cabinetLocInt + filingList.get(i).getCabinetInt();
+            bestFilingCombination(newIndex, railsArg, drawersArg, cabinetArg, quantity, localList, filingList);
 
-            // Remove element from the combination
-            local.remove(local.size() - 1);
+            // Remove the last Lamp from the "localList" - AKA Backtracking
+            localList.remove(localList.size() - 1);
         }
-    }
-
-	//getter
-	public ArrayList<CheapestCombination> getResult() {
-        return result;
-    }
+    }	
 }
-

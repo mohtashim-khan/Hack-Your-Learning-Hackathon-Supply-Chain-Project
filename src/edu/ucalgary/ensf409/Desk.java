@@ -33,15 +33,30 @@ public class Desk extends Furniture {
 	public String getLegs() {
 		return this.legs;
 	}
+
+	//returns 1 if legs == "Y" 0 otherwise
+	public int getLegsInt() {
+		return getIntFromYorN(this.legs);
+	}
 	
 	//Getter
 	public String getTop() {
 		return this.top;
 	}
+
+	//returns 1 if top == "Y" 0 otherwise
+	public int getTopInt() {
+		return getIntFromYorN(this.top);
+	}
 	
 	//Getter
 	public String getDrawer() {
 		return this.drawer;
+	}
+
+	//returns 1 if drawer == "Y" 0 otherwise
+	public int getDrawerInt() {
+		return getIntFromYorN(this.drawer);
 	}
 	
 	//Setter

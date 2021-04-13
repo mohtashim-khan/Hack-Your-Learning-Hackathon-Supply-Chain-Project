@@ -34,15 +34,30 @@ public class Filing extends Furniture{
 	public String getRails() {
 		return this.rails;
 	}
+
+	//returns 1 if rails == "Y" 0 otherwise
+	public int getRailsInt() {
+		return getIntFromYorN(this.rails);
+	}
 	
 	//Getter
 	public String getDrawers() {
 		return this.drawers;
 	}
+
+	//returns 1 if Drawers == "Y" 0 otherwise
+	public int getDrawersInt() {
+		return getIntFromYorN(this.drawers);
+	}
 	
 	//Getter
 	public String getCabinet() {
 		return this.cabinet;
+	}
+
+	//returns 1 if cabinet == "Y" 0 otherwise
+	public int getCabinetInt() {
+		return getIntFromYorN(this.cabinet);
 	}
 	
 	//Setter
