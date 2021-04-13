@@ -44,15 +44,13 @@ public class UI {
 	 */
 	public UI(String first, String second, String third, String forth) {
 		String [] temp = first.split(" ",3 );
-		type = temp [0];
-		item = temp [1].substring(0,temp[1].length()-1);
-		System.out.println(item);
-		
+		type = temp [0].replace("\n", "");
+		item = temp [1].substring(0,temp[1].length()-1).replace("\n","");
 		quanity = temp [2];
-	
-		DBURL = second;
-		username = third;
-		password = forth;
+		quanity = quanity.replace("\n", "");
+		DBURL = second.replace("\n","");
+		username = third.replace("\n", "");
+		password = forth.replace("\n", "");
 	}
 	
 	//Getter
@@ -107,7 +105,7 @@ public class UI {
 
 	/**
 	 * @param usedIDs the usedIDs to set
-	 */
+	 */	
 	public void setUsedIDs(String[] usedIDs) {
 		this.usedIDs = usedIDs;
 	}
@@ -124,7 +122,7 @@ public class UI {
 	 *Gives information of order details to dataBase SQL class.
 	 */
 	public void processOrder() {
-		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "study", "lamp"); // NEED TO FIX THE HARDCODING
+		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", type, item); // NEED TO FIX THE HARDCODING
 		myOrder.initConnection();
 		sqlDataStorage = myOrder.getData(); // ex. all mesh chair line items from table stored in array list
 		myOrder.close();
@@ -132,7 +130,7 @@ public class UI {
 	
 	public void deleteUsedIDs()
 	{
-		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "study", "lamp"); // NEED TO FIX THE HARDCODING
+		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "study", item); // NEED TO FIX THE HARDCODING
 		for(int i =0; i< usedIDs.length; i++)
 		{
 			myOrder.deleteDBEntry(usedIDs[i]);
@@ -149,21 +147,22 @@ public class UI {
 		CalculateCombinations findResults = new CalculateCombinations();//pass in Object []
 		int quanityNum = strToInt();
 		//use if statements to generate all combos for furniture items
-		if(item =="chair") {
+		if(item.equals("chair")) {
 			//findResults.findChairCombinations(sqlDataStorage, quanityNum); -- UNCOMMENT
 		}
 		
-		if(item == "desk") {
+		if(item.equals("desk")) {
 			//findResults.findDeskCombinations(sqlDataStorage, quanityNum);-- UNCOMMENT
 			
 		}
-		if(item == "filing") {
+		if(item.equals("filing")) {
 			//findResults.findFilingCombinations(sqlDataStorage, quanityNum);-- UNCOMMENT
 			
 		}
-		//if(item == "lamp") { -- UNCOMMENT
+		if(item.equals("lamp"))
+		{
 			findResults.findLampCombinations(sqlDataStorage, quanityNum);			
-		//}
+		}
 		usedIDs = findResults.getusedIDs();
 		totalPrice = findResults.getTotalPrice();
 		

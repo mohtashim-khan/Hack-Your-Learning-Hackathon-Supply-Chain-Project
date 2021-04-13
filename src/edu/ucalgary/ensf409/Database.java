@@ -25,7 +25,7 @@ public class Database
     	this.selectedType = selectedType.toLowerCase();
     	this.selectedTable = selectedTable.toLowerCase();
     	
-    	if(!(selectedTable == "chair" || selectedTable == "desk" || selectedTable == "filing" || selectedTable == "lamp"))
+    	if(!(selectedTable.equals("chair") || selectedTable.equals("desk") || selectedTable.equals("filing") || selectedTable.equals("lamp")))
     	{
     		throw new IllegalArgumentException("selectedTable is not valid");
     	}
@@ -52,22 +52,22 @@ public class Database
     public Object [] getData() throws NullPointerException
     {
     	selectFromDB();
-    	if(selectedTable == "chair")
+    	if(selectedTable.equals("chair"))
     	{
     	return chairList.toArray();
     	}
     	
-    	else if(selectedTable == "desk")
+    	else if(selectedTable.equals("desk"))
     	{
     	return deskList.toArray();
     	}
    
-    	else if(selectedTable == "lamp")
+    	else if(selectedTable.equals("lamp"))
     	{
     	return lampList.toArray();
     	}
     	
-    	else if(selectedTable == "filing")
+    	else if(selectedTable.equals("filing"))
     	{
     	return filingList.toArray();
     	}

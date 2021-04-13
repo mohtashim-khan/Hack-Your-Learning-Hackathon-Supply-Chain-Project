@@ -26,14 +26,15 @@ public class UITest {
 	  // Concats getter methods (getType, getItem, getQuanity, getTotalPrice, getDBURL, getUsername, getPassword)
 	  // to test again expected String
 	  public void testConstructor4() {
-	    UI testObj = new UI("test string, 1", "DBURLTest","usernameTest", "passwordTest");
+	    UI testObj = new UI("study lamp, 1", "DBURLTest","usernameTest", "passwordTest");
 	    String expResult = testObj.getType() + 
 	    				   testObj.getItem() +
 	    				   testObj.getQuanity() +
 	    				   testObj.getDBURLType() +
-	    				   testObj.getUsername ();
+	    				   testObj.getUsername ()+
+	    				   testObj.getPassword();
 	    
-	    assertEquals(expResult,"test string, 1"+"DBURLTest"+"usernameTest"+"passwordTest");
+	    assertEquals("studylamp1DBURLTestusernameTestpasswordTest", expResult);
 	    				   
 
 	    // See if the arrays are the same
@@ -43,11 +44,11 @@ public class UITest {
 	@Test
 	public void testCalculateOrder()
 	{
-		UI testObj = new UI("study lamp, 3", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
+		UI testObj = new UI("study lamp, 1", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
 		testObj.processOrder();
 		testObj.calculateOrder();
 		String[] result = testObj.getUsedIDs();
-		String[] expected = {"L980", "L982"};
+		String[] expected = {"L223", "L982"};
 		assertEquals(Arrays.toString(expected),Arrays.toString(result));
 	}
 	
