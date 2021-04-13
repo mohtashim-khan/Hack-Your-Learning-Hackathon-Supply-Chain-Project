@@ -158,7 +158,7 @@ public class Database
     public void deleteDBEntry(String id)
     {
     	try {
-            String query = "DELETE FROM "+selectedTable+" WHERE id = '"+id+"'";
+            String query = "DELETE FROM "+selectedTable+" WHERE id = '"+id.replace(" ", "")+"'";
             PreparedStatement myStmt = dbConnect.prepareStatement(query);
             myStmt.executeUpdate();
             myStmt.close();
@@ -177,9 +177,18 @@ public class Database
     
     
     
-    public void close() {
+    public void closeProcess() {
         try {
             results.close();
+            dbConnect.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void closeDelete()
+    {
+    	try {
             dbConnect.close();
         } catch (SQLException e) {
             e.printStackTrace();

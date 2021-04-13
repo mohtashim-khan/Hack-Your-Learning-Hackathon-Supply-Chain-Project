@@ -14,88 +14,88 @@
 //Package declaration
 package edu.ucalgary.ensf409;
 
-
-import java.util.*;  
-import java.io.File;  // Import the File class
-import java.io.IOException;  // Import the IOException class to handle errors
-import java.io.FileWriter;  
+import java.util.*;
+import java.io.File; // Import the File class
+import java.io.IOException; // Import the IOException class to handle errors
+import java.io.FileWriter;
 
 public class UI {
-	//Class variables
+	// Class variables
 	private String type; // mesh
 	private String item; // chair
 	private String quanity; // 1
 	private int totalPrice; // This will be the total price of the order
-	
-	private Object [] sqlDataStorage; // generic object array, will be filled with all necessary line items from data tables
-	private String[] usedIDs;	//String of the IDs used to make the new item for the user, will need to remove these IDs from the Database
-	
+
+	private Object[] sqlDataStorage; // generic object array, will be filled with all necessary line items from data
+										// tables
+	private String[] usedIDs; // String of the IDs used to make the new item for the user, will need to remove
+								// these IDs from the Database
+
 	public final String DBURL;
 	public final String username;
 	public final String password;
-	
-	
-	
+
 	// Create DBURL, username, and password class variables, need to send to Moto.
-	
-	
-	/*Constructor
-	 *Takes in Strings from user input and stores in class variables.
+
+	/*
+	 * Constructor Takes in Strings from user input and stores in class variables.
 	 */
 	public UI(String first, String second, String third, String forth) {
-		String [] temp = first.split(" ",3 );
-		type = temp [0].replace("\n", "");
-		item = temp [1].substring(0,temp[1].length()-1).replace("\n","");
-		quanity = temp [2];
+		String[] temp = first.split(" ", 3);
+		type = temp[0].replace("\n", "");
+		item = temp[1].substring(0, temp[1].length() - 1).replace("\n", "");
+		quanity = temp[2];
 		quanity = quanity.replace("\n", "");
-		DBURL = second.replace("\n","");
+		DBURL = second.replace("\n", "");
 		username = third.replace("\n", "");
 		password = forth.replace("\n", "");
 	}
-	
-	//Getter
+
+	// Getter
 	public String getType() {
 		return this.type;
 	}
-	
-	//Getter
+
+	// Getter
 	public String getItem() {
 		return this.item;
 	}
-	//Getter
+
+	// Getter
 	public String getQuanity() {
 		return this.quanity;
 	}
-	
-	//Getter
+
+	// Getter
 	public String getDBURLType() {
 		return this.DBURL;
 	}
-		
-	//Getter
+
+	// Getter
 	public String getUsername() {
 		return this.username;
 	}
-	//Getter
+
+	// Getter
 	public String getPassword() {
 		return this.password;
 	}
-	
-	//Setter
+
+	// Setter
 	public void setType(String type) {
 		this.type = type;
 	}
-	//Setter
+
+	// Setter
 	public void setItem(String item) {
 		this.item = item;
 	}
-	//Setter
+
+	// Setter
 	public void setQuanity(String quanity) {
 		this.quanity = quanity;
 	}
-	
-	
-	
+
 	/**
 	 * @return the usedIDs
 	 */
@@ -105,167 +105,166 @@ public class UI {
 
 	/**
 	 * @param usedIDs the usedIDs to set
-	 */	
+	 */
 	public void setUsedIDs(String[] usedIDs) {
 		this.usedIDs = usedIDs;
 	}
 
-	//str to int conversion
+	// str to int conversion
 	public int strToInt() {
-		int rst =Integer.parseInt(quanity);
+		int rst = Integer.parseInt(quanity);
 		return rst;
 	}
-	
-	//Setters have not been implemented for DBURL, username, and password
-	
-	/*processOrder
-	 *Gives information of order details to dataBase SQL class.
+
+	// Setters have not been implemented for DBURL, username, and password
+
+	/*
+	 * processOrder Gives information of order details to dataBase SQL class.
 	 */
 	public void processOrder() {
-		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", type, item); // NEED TO FIX THE HARDCODING
-		myOrder.initConnection();
-		sqlDataStorage = myOrder.getData(); // ex. all mesh chair line items from table stored in array list
-		myOrder.close();
-    }
-	
-	public void deleteUsedIDs()
-	{
-		Database myOrder = new Database ("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "study", item); // NEED TO FIX THE HARDCODING
-		for(int i =0; i< usedIDs.length; i++)
-		{
-			myOrder.deleteDBEntry(usedIDs[i]);
+		try {
+			Database myOrder = new Database(DBURL, username, password, type, item); // NEED TO FIX THE HARDCODING
+			myOrder.initConnection();
+			sqlDataStorage = myOrder.getData(); // ex. all mesh chair line items from table stored in array list
+			myOrder.closeProcess();
+		} catch (Exception e) {
+			throw new IllegalArgumentException("PROBLEM WITH DATABASE PROCESS");
 		}
-		myOrder.close();
 	}
-	
-	/*calculateOrder
-	 *Gives object [] of SQL line item to cheapestCombinations Class.
-	 *Receives new Object [] of cheapest items to fulfill order request.
-	 *Stores in class variable.
+
+	public void deleteUsedIDs() {
+		try {
+			Database myOrder = new Database(DBURL, username, password, type, item); // NEED TO FIX THE HARDCODING
+			myOrder.initConnection();
+			for (int i = 0; i < usedIDs.length; i++) {
+				myOrder.deleteDBEntry(usedIDs[i]);
+			}
+			myOrder.closeDelete();
+		} catch (Exception e) {
+			throw new IllegalArgumentException("PROBLEM WITH DATABASE DELETE");
+		}
+	}
+
+	/*
+	 * calculateOrder Gives object [] of SQL line item to cheapestCombinations
+	 * Class. Receives new Object [] of cheapest items to fulfill order request.
+	 * Stores in class variable.
 	 */
 	public void calculateOrder() {
-		CalculateCombinations findResults = new CalculateCombinations();//pass in Object []
+		CalculateCombinations findResults = new CalculateCombinations();// pass in Object []
 		int quanityNum = strToInt();
-		//use if statements to generate all combos for furniture items
-		if(item.equals("chair")) {
-			//findResults.findChairCombinations(sqlDataStorage, quanityNum); -- UNCOMMENT
+		// use if statements to generate all combos for furniture items
+		if (item.equals("chair")) {
+			findResults.findChairCombinations(sqlDataStorage, quanityNum);
 		}
-		
-		if(item.equals("desk")) {
-			//findResults.findDeskCombinations(sqlDataStorage, quanityNum);-- UNCOMMENT
-			
+
+		if (item.equals("desk")) {
+			findResults.findDeskCombinations(sqlDataStorage, quanityNum);
+
 		}
-		if(item.equals("filing")) {
-			//findResults.findFilingCombinations(sqlDataStorage, quanityNum);-- UNCOMMENT
-			
+		if (item.equals("filing")) {
+			findResults.findFilingCombinations(sqlDataStorage, quanityNum);
+
 		}
-		if(item.equals("lamp"))
-		{
-			findResults.findLampCombinations(sqlDataStorage, quanityNum);			
+		if (item.equals("lamp")) {
+			findResults.findLampCombinations(sqlDataStorage, quanityNum);
 		}
-		usedIDs = findResults.getusedIDs();
+		usedIDs = findResults.getBestCombIDs();
 		totalPrice = findResults.getTotalPrice();
-		
+
 	}
-	
-	/*displayOrder
-	 *Results of user's order request will be presented in the form of a file.txt.
+
+	/*
+	 * displayOrder Results of user's order request will be presented in the form of
+	 * a file.txt.
 	 */
 	public void displayOrder() {
-		String toBePrinted = formatOrderRequest(); //receives bigString (formatted output of order request)
+		String toBePrinted = formatOrderRequest(); // receives bigString (formatted output of order request)
 		createFile();
 		try {
-		      FileWriter myWriter = new FileWriter("Order_Request_Results.txt");
-		      myWriter.write(toBePrinted);
-		      myWriter.close();
-		      System.out.println("Successfully wrote to the file.");
-		    } 
-		catch (IOException e) {
-		      System.out.println("An error occurred.");
-		      e.printStackTrace();
-		    }
+			FileWriter myWriter = new FileWriter("Order_Request_Results.txt");
+			myWriter.write(toBePrinted);
+			myWriter.close();
+			System.out.println("Successfully wrote to the file.");
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
 	}
-	
-	/*createFile
-	 *Creates a file.txt named "Order_Request_Results.txt"
-	 *This file will be filled with information from the order request.
+
+	/*
+	 * createFile Creates a file.txt named "Order_Request_Results.txt" This file
+	 * will be filled with information from the order request.
 	 */
 	public void createFile() {
-		    try {
-		      File myObj = new File("Order_Request_Results.txt");
-		      if (myObj.createNewFile()) {
-		        System.out.println("File created: " + myObj.getName());
-		      } 
-		      else {
-		        System.out.println("File already exists.");
-		      }
-		    } 
-		    catch (IOException e) {
-		      System.out.println("An error occurred.");
-		      e.printStackTrace();
-		    }
-		  }
+		try {
+			File myObj = new File("Order_Request_Results.txt");
+			if (myObj.createNewFile()) {
+				System.out.println("File created: " + myObj.getName());
+			} else {
+				System.out.println("File already exists.");
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
 
-	/*formatOrderRequest
-	 *formats results from cheapestCombinations Class then
-	 *send the string to displayOrder.
+	/*
+	 * formatOrderRequest formats results from cheapestCombinations Class then send
+	 * the string to displayOrder.
 	 */
 	public String formatOrderRequest() {
 		StringBuilder bigString = new StringBuilder();
 		System.out.println("Processing your order... \n");
-		
-    	bigString.append("Furniture Order Form \n\n");
-    	bigString.append("Faculty Name: \n");
-    	bigString.append("Contact: \n");
-    	bigString.append("Date: \n\n");
-    	bigString.append("Original Request: " + type + " " + item + "," + quanity + "\n\n");
-    	
-    	bigString.append("Items Ordered :\n");
-    	if(usedIDs == null)
-    	{
-    		bigString.append("ORDER COULD NOT BE FULFILLED");
-    	}
-    	else {
-    	for(int i = 0; i<usedIDs.length; i++)
-    	{
-    		bigString.append("ID: " + usedIDs[i]+ "\n"); // need furniture code class to store codes
-    	}
-    	
-    	bigString.append("Total Price: $"+totalPrice); // price is hard-coded for now (example).
-    	}
-    	System.out.println(bigString.toString());
-    	return bigString.toString();
-	}
-		
-	public static void main(String[] args) {
-		
-			//prompts user to enter their order request in the form of type item, quantity 	
-			Scanner sc= new Scanner(System.in);  
-			try {
-				System.out.print("Please enter your order request (type item, quanity): \n");  
-				String storage1= sc.nextLine();
-			
-				//prompts user again to enter DBURL, username, and password
-				System.out.print("Please enter DBURL: \n");  
-				String storage2 = sc.nextLine();
-			
-				System.out.print("Please enter username: \n");  
-				String storage3 = sc.nextLine();
-			
-				System.out.print("Please enter password: \n");  
-				String storage4 = sc.nextLine();
-			
-				//create new UI object and pass in all user input
-				UI newOrder = new UI(storage1, storage2, storage3, storage4);
-		
-				
-				newOrder.processOrder(); 
-				newOrder.calculateOrder();
-				newOrder.displayOrder();
-				newOrder.deleteUsedIDs();
+
+		bigString.append("Furniture Order Form \n\n");
+		bigString.append("Faculty Name: \n");
+		bigString.append("Contact: \n");
+		bigString.append("Date: \n\n");
+		bigString.append("Original Request: " + type + " " + item + "," + quanity + "\n\n");
+
+		bigString.append("Items Ordered :\n");
+		if (usedIDs == null) {
+			bigString.append("ORDER COULD NOT BE FULFILLED");
+		} else {
+			for (int i = 0; i < usedIDs.length; i++) {
+				bigString.append("ID: " + usedIDs[i] + "\n"); // need furniture code class to store codes
 			}
-	    	finally {
-	    		sc.close();
-	    	}		
+
+			bigString.append("Total Price: $" + totalPrice); // price is hard-coded for now (example).
+		}
+		System.out.println(bigString.toString());
+		return bigString.toString();
+	}
+
+	public static void main(String[] args) {
+
+		// prompts user to enter their order request in the form of type item, quantity
+		Scanner sc = new Scanner(System.in);
+		try {
+			System.out.print("Please enter your order request (type item, quanity): \n");
+			String storage1 = sc.nextLine();
+
+			// prompts user again to enter DBURL, username, and password
+			System.out.print("Please enter DBURL: \n");
+			String storage2 = sc.nextLine();
+
+			System.out.print("Please enter username: \n");
+			String storage3 = sc.nextLine();
+
+			System.out.print("Please enter password: \n");
+			String storage4 = sc.nextLine();
+
+			// create new UI object and pass in all user input
+			UI newOrder = new UI(storage1, storage2, storage3, storage4);
+
+			newOrder.processOrder();
+			newOrder.calculateOrder();
+			newOrder.displayOrder();
+			newOrder.deleteUsedIDs();
+		} finally {
+			sc.close();
+		}
 	}
 }
