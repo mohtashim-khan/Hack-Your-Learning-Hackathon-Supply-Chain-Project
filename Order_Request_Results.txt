@@ -4,7 +4,7 @@ Faculty Name:
 Contact: 
 Date: 
 
-Original Request: task chair,1
+Original Request: study lamp,1
 
 Items Ordered :
 ORDER COULD NOT BE FULFILLED

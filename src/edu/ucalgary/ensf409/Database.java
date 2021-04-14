@@ -16,7 +16,8 @@ public class Database
 	private ArrayList<Lamp> lampList = new ArrayList<Lamp>();
 	private ArrayList<Filing> filingList = new ArrayList <Filing>();
 	
-    //Databases constructor, receives the URL, the Username, and the password to the database. Stores the required table and type requested.
+    //Database's constructor, receives the URL, the Username, and the password to the database. Stores the required table and type requested.
+	// throws IllegalArguement exception if the selectedTable is not a part of the furniture classes
     public Database(String dBURL, String username, String password, String selectedType, String selectedTable) throws IllegalArgumentException {
     	
     	DBURL = dBURL;
@@ -48,7 +49,7 @@ public class Database
     
     
     
-   //this will get called either in the UI class or the CalculateCombinations class. Will need to test
+   //getData() calls the 
     public Object [] getData() throws NullPointerException
     {
     	selectFromDB();
@@ -283,6 +284,7 @@ public class Database
 	public ArrayList<Filing> getFilingList() {
 		return filingList;
 	}
+
 	
 	
 
