@@ -52,7 +52,44 @@ public class UITest {
 		assertEquals(Arrays.toString(expected),Arrays.toString(result));
 	}
 	
+	
+	@Test 
+	public void testCreateFile()
+	{
+		UI testObj = new UI("study lamp, 1", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
+		
+	}
 
+	@Test
+	public void testDeleteUsedIDs()
+	{
+		
+	}
+	
+	@Test
+	public void testDisplayOrder()
+	{
+		
+	}
+	
+	@Test
+	public void testFormatOrderRequest()
+	{
+		
+	}
+	
+	@Test
+	public void testProcessOrder()
+	{
+		
+		
+	}
+	
+	@Test
+	public void testStrToInt()
+	{
+		
+	}
 
 }
 

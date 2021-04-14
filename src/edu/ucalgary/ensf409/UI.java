@@ -111,7 +111,7 @@ public class UI {
 	}
 
 	// str to int conversion
-	public int strToInt() {
+	private int strToInt() {
 		int rst = Integer.parseInt(quanity);
 		return rst;
 	}
@@ -196,7 +196,7 @@ public class UI {
 	 * createFile Creates a file.txt named "Order_Request_Results.txt" This file
 	 * will be filled with information from the order request.
 	 */
-	public void createFile() {
+	private void createFile() {
 		try {
 			File myObj = new File("Order_Request_Results.txt");
 			if (myObj.createNewFile()) {
@@ -214,7 +214,7 @@ public class UI {
 	 * formatOrderRequest formats results from cheapestCombinations Class then send
 	 * the string to displayOrder.
 	 */
-	public String formatOrderRequest() {
+	private String formatOrderRequest() {
 		StringBuilder bigString = new StringBuilder();
 		System.out.println("Processing your order... \n");
 
