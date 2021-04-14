@@ -29,18 +29,24 @@ package edu.ucalgary.ensf409;
 
 //Import Statements
 import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.FlowLayout;
 
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;
+
+
 public class OrderGUI extends JFrame implements ActionListener, MouseListener{
 	
 	//list of all furniture type descriptions from SQL database
-		public static String [] itemsList = {"kneeling","task","mesh","executive", 
-											"ergonomic","standing", "adjustable",
-											"traditional","desk","study","swing arm",
-											"small","medium","large"};
+	public static String [] itemsList 
+	= {"kneeling","task","mesh","executive", 
+	   "ergonomic","standing", "adjustable",
+	   "traditional","desk","study","swing arm",
+	   "small","medium","large"};
 	
 	// Class variables
 	private String DBURLDef;
@@ -106,7 +112,7 @@ public class OrderGUI extends JFrame implements ActionListener, MouseListener{
         //A default model is created.
         typeLabel = new JLabel("Type:");
         itemLabel = new JLabel("Item:");
-        quantityLabel = new JLabel("Quantity:");
+        quantityLabel = new JLabel("Quanity (Integer Please!):");
         
         
         //Sample test in text boxes
@@ -281,17 +287,16 @@ public class OrderGUI extends JFrame implements ActionListener, MouseListener{
     //put exceptions heres to to prompt user to enter correct inputs
     // NEED TO FIX
     private boolean validateInput(){
-    	
         boolean allInputValid = true;
         
         //DBURLDef check
-        if(DBURLDef.length() < 0||!(DBURLDef.substring(0,11).equals("jdbc:mysql:"))||DBURLDef.contains(" ")){
+        if(DBURLDef.length() < 1||!(DBURLDef.substring(0,11).equals("jdbc:mysql:"))||DBURLDef.contains(" ")){
         	allInputValid = false;
         	JOptionPane.showMessageDialog(this, DBURLDef + " is an invalid DBURL input.");
         }
         
         //usernameDef check
-        if(usernameDef.length() < 0||usernameDef.length() > 30){
+        if(usernameDef.length() < 1||usernameDef.length() > 30){
             allInputValid = false;
             JOptionPane.showMessageDialog(this, usernameDef + " is an invalid username input.");
         }
@@ -309,25 +314,23 @@ public class OrderGUI extends JFrame implements ActionListener, MouseListener{
         		 scanner=1; 		 
         	 }
         }
-        
         if(scanner==0){
             allInputValid = false;
             JOptionPane.showMessageDialog(this, typeDef + " is an invalid furniture type input.");
         }
         
         //itemDef check
-        if(!(itemDef.equals("chair") || itemDef.equals("desk") || itemDef.equals("filing") || itemDef.equals("lamp"))){
+        if(itemDef.length() < 1||!(itemDef.equals("chair") || itemDef.equals("desk") || itemDef.equals("filing") || itemDef.equals("lamp"))){
             allInputValid = false;
             JOptionPane.showMessageDialog(this, itemDef + " is an invalid furniture item input.");
         }
         
         // NEED 1 MORE CHECK FOR VALID INT CONVERSION 
         
-        if(quantityDef.length()<0||quantityDef.contains(" ")){
+        if(quantityDef.length()<1||quantityDef.contains(" ")||quantityDef.length()>2){
             allInputValid = false;
             JOptionPane.showMessageDialog(this, quantityDef + " is an invalid quantity input.");
         }
-        
         return allInputValid;  
     }
     
