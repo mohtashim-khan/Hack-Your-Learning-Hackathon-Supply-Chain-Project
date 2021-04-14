@@ -29,7 +29,7 @@ public class UITest {
 	    UI testObj = new UI("study lamp, 1", "DBURLTest","usernameTest", "passwordTest");
 	    String expResult = testObj.getType() + 
 	    				   testObj.getItem() +
-	    				   testObj.getQuanity() +
+	    				   testObj.getQuantity() +
 	    				   testObj.getDBURLType() +
 	    				   testObj.getUsername ()+
 	    				   testObj.getPassword();

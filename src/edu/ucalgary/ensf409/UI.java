@@ -6,8 +6,8 @@
  *@since 1.0
  *
  *UI is a basic class that gets user input (order request) from the terminal and stores thats information
- *to be used to create an order request. The summer of the order will be displayed to the user in the form of
- *a txt.fie.
+ *to be used to create an order request. The summary of the order will be displayed to the user in the form of
+ *a txt.fie and also on the terminal/console.
  *
  */
 
@@ -20,32 +20,40 @@ import java.io.IOException; // Import the IOException class to handle errors
 import java.io.FileWriter;
 
 public class UI {
+	
 	// Class variables
-	private String type; // mesh
-	private String item; // chair
-	private String quanity; // 1
+	private String type; 
+	private String item; 
+	private String quantity;
 	private int totalPrice; // This will be the total price of the order
 
-	private Object[] sqlDataStorage; // generic object array, will be filled with all necessary line items from data
-										// tables
+	private Object[] sqlDataStorage; // generic object array, will be filled with all necessary line items from data tables
+
 	private String[] usedIDs; // String of the IDs used to make the new item for the user, will need to remove
-								// these IDs from the Database
+							  // these IDs from the Database
 
 	public final String DBURL;
 	public final String username;
 	public final String password;
-
-	// Create DBURL, username, and password class variables, need to send to Moto.
-
-	/*
-	 * Constructor Takes in Strings from user input and stores in class variables.
+	
+	/**
+	 * This method "UI constructor" takes in the String inputs from the user and 
+	 * stores them in their respective class variables.
+	 * @param first - type, item, quantity
+	 * @param second - DBURL
+	 * @param third - username
+	 * @param forth - password
+	 * 
+	 * (Simple explanation)
+	 * The String passed in by "first" will be split up into 3 smaller strings at the space character (" ")
+	 * then each substring will be stored in their respective class variables.
 	 */
 	public UI(String first, String second, String third, String forth) {
 		String[] temp = first.split(" ", 3);
 		type = temp[0].replace("\n", "");
 		item = temp[1].substring(0, temp[1].length() - 1).replace("\n", "");
-		quanity = temp[2];
-		quanity = quanity.replace("\n", "");
+		quantity = temp[2];
+		quantity = quantity.replace("\n", "");
 		DBURL = second.replace("\n", "");
 		username = third.replace("\n", "");
 		password = forth.replace("\n", "");
@@ -62,8 +70,8 @@ public class UI {
 	}
 
 	// Getter
-	public String getQuanity() {
-		return this.quanity;
+	public String getQuantity() {
+		return this.quantity;
 	}
 
 	// Getter
@@ -92,38 +100,40 @@ public class UI {
 	}
 
 	// Setter
-	public void setQuanity(String quanity) {
-		this.quanity = quanity;
+	public void setQuantity(String quanity) {
+		this.quantity = quanity;
 	}
 
-	/**
-	 * @return the usedIDs
-	 */
+	// Getter
 	public String[] getUsedIDs() {
 		return usedIDs;
 	}
 
-	/**
-	 * @param usedIDs the usedIDs to set
-	 */
+	// Setter
 	public void setUsedIDs(String[] usedIDs) {
 		this.usedIDs = usedIDs;
 	}
-
-	// str to int conversion
+	
+	/**
+	 * @return the rst (int to str conversion for quantity)
+	 */
 	public int strToInt() {
-		int rst = Integer.parseInt(quanity);
+		int rst = Integer.parseInt(quantity);
 		return rst;
 	}
-
-	// Setters have not been implemented for DBURL, username, and password
-
-	/*
-	 * processOrder Gives information of order details to dataBase SQL class.
+	
+	/**
+	 * This method "processOrder" will create a new Database object and passes in 
+	 * DBURL, username, password,type, and item.
+	 * 
+	 * (Simple explanation)
+	 * This function will retrieve the user requested item table with line items 
+	 * that match the user's request from the SQL database and stores it in an
+	 * Object [] called sqlDataStorage.
 	 */
 	public void processOrder() {
 		try {
-			Database myOrder = new Database(DBURL, username, password, type, item); // NEED TO FIX THE HARDCODING
+			Database myOrder = new Database(DBURL, username, password, type, item); 
 			myOrder.initConnection();
 			sqlDataStorage = myOrder.getData(); // ex. all mesh chair line items from table stored in array list
 			myOrder.closeProcess();
@@ -132,9 +142,16 @@ public class UI {
 		}
 	}
 
+	/**
+	 * This method "deleteUsedIDs" will send the IDs to the SQL database of the furniture items
+	 * used to fulfill the order.
+	 * 
+	 * (Simple explanation)
+	 * Any items used will be removed from the database.
+	 */
 	public void deleteUsedIDs() {
 		try {
-			Database myOrder = new Database(DBURL, username, password, type, item); // NEED TO FIX THE HARDCODING
+			Database myOrder = new Database(DBURL, username, password, type, item);
 			myOrder.initConnection();
 			for (int i = 0; i < usedIDs.length; i++) {
 				myOrder.deleteDBEntry(usedIDs[i]);
@@ -145,14 +162,18 @@ public class UI {
 		}
 	}
 
-	/*
-	 * calculateOrder Gives object [] of SQL line item to cheapestCombinations
-	 * Class. Receives new Object [] of cheapest items to fulfill order request.
-	 * Stores in class variable.
+	/**
+	 * This method "calculateOrder" gives the object [] of SQL line items to cheapestCombinations
+	 * used to fulfill the order.
+	 * 
+	 * (Simple explanation)
+	 * Once the calculation process has been completed, all furniture ID codes deemed to be the
+	 * cheapest combinations will be stored in the String [] usedIDs
 	 */
 	public void calculateOrder() {
 		CalculateCombinations findResults = new CalculateCombinations();// pass in Object []
 		int quanityNum = strToInt();
+		
 		// use if statements to generate all combos for furniture items
 		if (item.equals("chair")) {
 			findResults.findChairCombinations(sqlDataStorage, quanityNum);
@@ -174,9 +195,14 @@ public class UI {
 
 	}
 
-	/*
-	 * displayOrder Results of user's order request will be presented in the form of
-	 * a file.txt.
+	/**
+	 * This method "displayOder" displays the results of the order in a .txt format
+	 * 
+	 * (Simple explanation)
+	 * Within this function, there will be a call to formatOrderRequest where that function
+	 * will properly format the results of the user's order in a well-formatted manner.
+	 * Once the formatted string has been return, to displayOrder, a new .txt will be 
+	 * created and the formatted string will be written in the file.
 	 */
 	public void displayOrder() {
 		String toBePrinted = formatOrderRequest(); // receives bigString (formatted output of order request)
@@ -192,9 +218,12 @@ public class UI {
 		}
 	}
 
-	/*
-	 * createFile Creates a file.txt named "Order_Request_Results.txt" This file
-	 * will be filled with information from the order request.
+	/**
+	 * This method "createFile" is a standard way to create a .txt file
+	 * 
+	 * (Simple explanation)
+	 * if the user wishes to enter multiple orders, the contents in the file
+	 * will be overwritten and the new results from the order request will be displayed.
 	 */
 	public void createFile() {
 		try {
@@ -202,7 +231,7 @@ public class UI {
 			if (myObj.createNewFile()) {
 				System.out.println("File created: " + myObj.getName());
 			} else {
-				System.out.println("File already exists.");
+				System.out.println("Order_Request_Results File has been Overwritten. A new Order has been created.");
 			}
 		} catch (IOException e) {
 			System.out.println("An error occurred.");
@@ -210,9 +239,14 @@ public class UI {
 		}
 	}
 
-	/*
-	 * formatOrderRequest formats results from cheapestCombinations Class then send
-	 * the string to displayOrder.
+	/**
+	 * This method "formatOrderRequest" is called from "displayOrder."
+	 * 
+	 * (Simple explanation)
+	 * This function uses the StringBuilder class to format the results of the order in 
+	 * a nice and well-formatted manner.
+	 * In the event the order could not be fulfilled, a message will appear notifying the 
+	 * user that the "ORDER COULD NOT BE FULFILLED."
 	 */
 	public String formatOrderRequest() {
 		StringBuilder bigString = new StringBuilder();
@@ -222,7 +256,7 @@ public class UI {
 		bigString.append("Faculty Name: \n");
 		bigString.append("Contact: \n");
 		bigString.append("Date: \n\n");
-		bigString.append("Original Request: " + type + " " + item + "," + quanity + "\n\n");
+		bigString.append("Original Request: " + type + " " + item + "," + quantity + "\n\n");
 
 		bigString.append("Items Ordered :\n");
 		if (usedIDs == null) {
@@ -231,13 +265,25 @@ public class UI {
 			for (int i = 0; i < usedIDs.length; i++) {
 				bigString.append("ID: " + usedIDs[i] + "\n"); // need furniture code class to store codes
 			}
-
 			bigString.append("Total Price: $" + totalPrice); // price is hard-coded for now (example).
 		}
 		System.out.println(bigString.toString());
 		return bigString.toString();
 	}
-
+	
+	/**
+	 * This method "main" is the start of the order request program
+	 * 
+	 * (Simple explanation)
+	 * The program prompts the user to first enter their order request in the form of:
+	 * type item, quantity.
+	 * Afterwards, the program will prompt the user to enter their SQL infoamtion in
+	 * the form of: DBURL, username, and password.
+	 * All of the users input will be passed into the constructor of the UI class.
+	 * Main makes a new UI object called newOrder.
+	 * newOrder will make several function calls (processOrder, calculateOrder,
+	 * displayOrder, and deleteUsedIds) to run through the entire operation of the program.
+	 */
 	public static void main(String[] args) {
 
 		// prompts user to enter their order request in the form of type item, quantity
