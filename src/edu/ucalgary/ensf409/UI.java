@@ -37,26 +37,15 @@ public class UI {
 	public final String password;
 	
 	/**
-	 * This method "UI constructor" takes in the String inputs from the user and 
-	 * stores them in their respective class variables.
-	 * @param first - type, item, quantity
-	 * @param second - DBURL
-	 * @param third - username
-	 * @param forth - password
-	 * 
-	 * (Simple explanation)
-	 * The String passed in by "first" will be split up into 3 smaller strings at the space character (" ")
-	 * then each substring will be stored in their respective class variables.
+	 * Constructor for UI class, simple constructor that takes in six Args for type, quantity, Dburl, username, and password and assigns them values.
 	 */
-	public UI(String first, String second, String third, String forth) {
-		String[] temp = first.split(" ", 3);
-		type = temp[0].replace("\n", "");
-		item = temp[1].substring(0, temp[1].length() - 1).replace("\n", "");
-		quantity = temp[2];
-		quantity = quantity.replace("\n", "");
-		DBURL = second.replace("\n", "");
-		username = third.replace("\n", "");
-		password = forth.replace("\n", "");
+	public UI(String type, String item, String quantity, String dBURL, String username, String password) {
+		this.type = type.replace(" ", "");
+		this.item = item.replace(" ", "");
+		this.quantity = quantity.replace(" ", "");
+		DBURL = dBURL.replace(" ", "");
+		this.username = username.replace(" ", "");
+		this.password = password.replace(" ", "");
 	}
 
 	// Getter
@@ -119,7 +108,7 @@ public class UI {
 	 * @return the rst (int to str conversion for quantity)
 	 */
 	private int strToInt() {
-		int rst = Integer.parseInt(quanity);
+		int rst = Integer.parseInt(quantity);
 		return rst;
 	}
 	
@@ -132,14 +121,14 @@ public class UI {
 	 * that match the user's request from the SQL database and stores it in an
 	 * Object [] called sqlDataStorage.
 	 */
-	public void processOrder() {
+	public void processOrder() throws DatabaseProcessException {
 		try {
 			Database myOrder = new Database(DBURL, username, password, type, item); 
 			myOrder.initConnection();
 			sqlDataStorage = myOrder.getData(); // ex. all mesh chair line items from table stored in array list
 			myOrder.closeProcess();
 		} catch (Exception e) {
-			throw new IllegalArgumentException("PROBLEM WITH DATABASE PROCESS");
+			throw new DatabaseProcessException("PROBLEM WITH DATABASE PROCESS");
 		}
 	}
 
@@ -150,7 +139,7 @@ public class UI {
 	 * (Simple explanation)
 	 * Any items used will be removed from the database.
 	 */
-	public void deleteUsedIDs() {
+	public void deleteUsedIDs() throws DatabaseDeleteException {
 		try {
 			Database myOrder = new Database(DBURL, username, password, type, item);
 			myOrder.initConnection();
@@ -159,7 +148,7 @@ public class UI {
 			}
 			myOrder.closeDelete();
 		} catch (Exception e) {
-			throw new IllegalArgumentException("PROBLEM WITH DATABASE DELETE");
+			throw new DatabaseDeleteException("PROBLEM WITH DATABASE DELETE");
 		}
 	}
 
@@ -249,7 +238,7 @@ public class UI {
 	 * In the event the order could not be fulfilled, a message will appear notifying the 
 	 * user that the "ORDER COULD NOT BE FULFILLED."
 	 */
-	private String formatOrderRequest() {
+	public String formatOrderRequest() {
 		StringBuilder bigString = new StringBuilder();
 		System.out.println("Processing your order... \n");
 
@@ -285,33 +274,5 @@ public class UI {
 	 * newOrder will make several function calls (processOrder, calculateOrder,
 	 * displayOrder, and deleteUsedIds) to run through the entire operation of the program.
 	 */
-	public static void main(String[] args) {
-
-		// prompts user to enter their order request in the form of type item, quantity
-		Scanner sc = new Scanner(System.in);
-		try {
-			System.out.print("Please enter your order request (type item, quanity): \n");
-			String storage1 = sc.nextLine();
-
-			// prompts user again to enter DBURL, username, and password
-			System.out.print("Please enter DBURL: \n");
-			String storage2 = sc.nextLine();
-
-			System.out.print("Please enter username: \n");
-			String storage3 = sc.nextLine();
-
-			System.out.print("Please enter password: \n");
-			String storage4 = sc.nextLine();
-
-			// create new UI object and pass in all user input
-			UI newOrder = new UI(storage1, storage2, storage3, storage4);
-
-			newOrder.processOrder();
-			newOrder.calculateOrder();
-			newOrder.displayOrder();
-			newOrder.deleteUsedIDs();
-		} finally {
-			sc.close();
-		}
-	}
+	
 }

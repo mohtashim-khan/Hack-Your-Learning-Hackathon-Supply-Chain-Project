@@ -4,8 +4,7 @@ Faculty Name:
 Contact: 
 Date: 
 
-Original Request: study lamp,1
+Original Request: task chair,1
 
 Items Ordered :
-ID: L928
-Total Price: $10
+ORDER COULD NOT BE FULFILLED

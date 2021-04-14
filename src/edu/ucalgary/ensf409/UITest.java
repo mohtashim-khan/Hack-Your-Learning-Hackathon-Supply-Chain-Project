@@ -25,7 +25,8 @@ public class UITest {
 	  // Constructor created with 4 arguments
 	  // Concats getter methods (getType, getItem, getQuanity, getTotalPrice, getDBURL, getUsername, getPassword)
 	  // to test again expected String
-	  public void testConstructor4() {
+	  public void testConstructor4() 
+	{
 	    UI testObj = new UI("study lamp, 1", "DBURLTest","usernameTest", "passwordTest");
 	    String expResult = testObj.getType() + 
 	    				   testObj.getItem() +
@@ -37,10 +38,16 @@ public class UITest {
 	    assertEquals("studylamp1DBURLTestusernameTestpasswordTest", expResult);
 	    				   
 
-	    // See if the arrays are the same
-	  //  assertTrue("Constructor test has failed", Arrays.equals(,));
+	  
 	  }
 	
+	@Test
+	public void testProcessOrder()
+	{
+		UI testObj = new UI("study lamp, 1", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
+		testObj.processOrder();
+		
+	}
 	@Test
 	public void testCalculateOrder()
 	{
@@ -53,43 +60,30 @@ public class UITest {
 	}
 	
 	
-	@Test 
-	public void testCreateFile()
-	{
-		UI testObj = new UI("study lamp, 1", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
-		
-	}
 
-	@Test
-	public void testDeleteUsedIDs()
-	{
-		
-	}
-	
 	@Test
 	public void testDisplayOrder()
 	{
+		UI testObj = new UI("study lamp, 1", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
+		testObj.processOrder();
+		testObj.calculateOrder();
+		testObj.displayOrder();
+		
+	}
+	@Test
+	public void testDeleteUsedIDs()
+	{
+		UI testObj = new UI("study lamp, 1", "jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9");
+		testObj.processOrder();
+		testObj.calculateOrder();
+		testObj.displayOrder();
+		testObj.deleteUsedIDs();
+		
+		
+		
 		
 	}
 	
-	@Test
-	public void testFormatOrderRequest()
-	{
-		
-	}
-	
-	@Test
-	public void testProcessOrder()
-	{
-		
-		
-	}
-	
-	@Test
-	public void testStrToInt()
-	{
-		
-	}
 
 }
 

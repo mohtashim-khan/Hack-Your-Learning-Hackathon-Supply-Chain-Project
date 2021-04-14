@@ -86,7 +86,7 @@ public class DatabaseTest {
 		initialArray = test.getData();
 		test.deleteDBEntry("test");
 		deletedEntryArray = test.getData();
-		assertNotEquals(((Chair) deletedEntryArray[deletedEntryArray.length-1]).getiD(),((Chair) initialArray[initialArray.length-1]).getiD());
+		assertNotEquals("Both arrays are identical, the entry was not deleted!",((Chair) deletedEntryArray[deletedEntryArray.length-1]).getiD(),((Chair) initialArray[initialArray.length-1]).getiD());
 		
 		
 	}

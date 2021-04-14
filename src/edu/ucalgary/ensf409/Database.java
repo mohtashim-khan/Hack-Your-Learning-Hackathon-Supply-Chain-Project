@@ -100,10 +100,11 @@ public class Database
             		String type = results.getString("type");
             		String price = results.getString("price");
             		String manuID = results.getString("manuID");
+            		String legs = results.getString("legs");
             		String arms = results.getString("arms");
             		String seat = results.getString("seat");
             		String cushion = results.getString("cushion");
-            		chairList.add(new Chair(id,type,price,manuID,arms,seat,cushion));
+            		chairList.add(new Chair(id,type,price,manuID,legs,arms,seat,cushion));
             	}
             case "lamp":
             	while(results.next())
