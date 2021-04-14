@@ -5,8 +5,11 @@
  *@version 1.0
  *@since 1.0
  *
- *UI is a basic class that gets user input (order request) from the terminal and stores thats information
- *to be used to create an order request. The summary of the order will be displayed to the user in the form of
+ *UI is a basic class that is part of the front-end of our program.
+ *This class receives the user's input from the OrderGUI class and stores 
+ *thats information in the class variables and will be used to create an order request.
+ *This class also interacts with the  Database and CalculateCombinations Classes.
+ *The summary of the order will be displayed to the user in the form of
  *a txt.fie and also on the terminal/console.
  *
  */
@@ -14,6 +17,7 @@
 //Package declaration
 package edu.ucalgary.ensf409;
 
+//Import Statements
 import java.util.*;
 import java.io.File; // Import the File class
 import java.io.IOException; // Import the IOException class to handle errors
@@ -37,7 +41,9 @@ public class UI {
 	public final String password;
 	
 	/**
-	 * Constructor for UI class, simple constructor that takes in six Args for type, quantity, Dburl, username, and password and assigns them values.
+	 * Constructor for UI class. This is simple constructor that takes in six args for
+	 * type, item, quantity, DBURL, username, and password and assigns them 
+	 * to their respective class variables. Any spaces in the strings will be removed.
 	 */
 	public UI(String type, String item, String quantity, String dBURL, String username, String password) {
 		this.type = type.replace(" ", "");
@@ -260,19 +266,4 @@ public class UI {
 		System.out.println(bigString.toString());
 		return bigString.toString();
 	}
-	
-	/**
-	 * This method "main" is the start of the order request program
-	 * 
-	 * (Simple explanation)
-	 * The program prompts the user to first enter their order request in the form of:
-	 * type item, quantity.
-	 * Afterwards, the program will prompt the user to enter their SQL infoamtion in
-	 * the form of: DBURL, username, and password.
-	 * All of the users input will be passed into the constructor of the UI class.
-	 * Main makes a new UI object called newOrder.
-	 * newOrder will make several function calls (processOrder, calculateOrder,
-	 * displayOrder, and deleteUsedIds) to run through the entire operation of the program.
-	 */
-	
 }
