@@ -150,14 +150,14 @@ public class CalculateCombinations {
 	
 	// This find<item>Combinations method is the driver class for recursion 
 	public void findChairCombinations (Object[] chairObjectList, int quantity) {
-        // Type cast the returned Object[] to the required Array List type
+         // Type cast the returned Object[] to the required Array List type
 		ArrayList<Chair> chairList = new ArrayList<>();
         for(int i = 0; i < chairObjectList.length; i++){
             chairList.add((Chair) chairObjectList[i]);                               
         }
 
 		//This locallist will contain all combinations that fullfill the order!
-        ArrayList<Chair> localList = new ArrayList<>();  
+        ArrayList<Lamp> localList = new ArrayList<>();
 
         //starts the recursion
         bestChairCombination(0, 0, 0, 0, 0, quantity, localList, chairList);
@@ -294,7 +294,7 @@ public class CalculateCombinations {
 
 
     // This find<item>Combinations method is the driver class for recursion
-	public void findAllCombinationsFiling (Object[] filingObjList, int quantity) {
+	public void findFilingCombinations(Object[] filingObjList, int quantity) {
         // Type cast the returned Object[] to the required Array List type
         ArrayList<Filing> filingList = new ArrayList<>();
         for(int i = 0; i < filingObjList.length; i++){
