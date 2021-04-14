@@ -22,6 +22,9 @@ import java.util.*;
 import java.io.File; // Import the File class
 import java.io.IOException; // Import the IOException class to handle errors
 import java.io.FileWriter;
+import java.time.format.DateTimeFormatter;  
+import java.time.LocalDateTime;
+
 
 public class UI {
 	
@@ -246,12 +249,14 @@ public class UI {
 	 */
 	public String formatOrderRequest() {
 		StringBuilder bigString = new StringBuilder();
-		System.out.println("Processing your order... \n");
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now(); 
+		System.out.println("Processing your new order....\n");
 
 		bigString.append("Furniture Order Form \n\n");
-		bigString.append("Faculty Name: \n");
-		bigString.append("Contact: \n");
-		bigString.append("Date: \n\n");
+		bigString.append("Faculty Name: Schulich School of Engineering \n");
+		bigString.append("Contact: ENSF 409 - Group #73\n");
+		bigString.append("Date: " + dtf.format(now) + "\n\n");
 		bigString.append("Original Request: " + type + " " + item + "," + quantity + "\n\n");
 
 		bigString.append("Items Ordered :\n");
