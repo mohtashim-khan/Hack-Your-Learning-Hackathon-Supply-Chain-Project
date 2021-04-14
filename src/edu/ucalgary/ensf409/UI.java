@@ -113,12 +113,13 @@ public class UI {
 	public void setUsedIDs(String[] usedIDs) {
 		this.usedIDs = usedIDs;
 	}
-	
+
+
 	/**
 	 * @return the rst (int to str conversion for quantity)
 	 */
-	public int strToInt() {
-		int rst = Integer.parseInt(quantity);
+	private int strToInt() {
+		int rst = Integer.parseInt(quanity);
 		return rst;
 	}
 	
@@ -225,7 +226,7 @@ public class UI {
 	 * if the user wishes to enter multiple orders, the contents in the file
 	 * will be overwritten and the new results from the order request will be displayed.
 	 */
-	public void createFile() {
+	private void createFile() {
 		try {
 			File myObj = new File("Order_Request_Results.txt");
 			if (myObj.createNewFile()) {
@@ -248,7 +249,7 @@ public class UI {
 	 * In the event the order could not be fulfilled, a message will appear notifying the 
 	 * user that the "ORDER COULD NOT BE FULFILLED."
 	 */
-	public String formatOrderRequest() {
+	private String formatOrderRequest() {
 		StringBuilder bigString = new StringBuilder();
 		System.out.println("Processing your order... \n");
 
