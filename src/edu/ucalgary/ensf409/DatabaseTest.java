@@ -16,7 +16,8 @@ import org.junit.Test;
 public class DatabaseTest {
 
 	/**
-	 * Test method for {@link edu.ucalgary.ensf409.Database#Database(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 * Test method for Database constructor.
+	 * tests if the constructor is working as intendend and is filling in all the right fields.
 	 */
 	@Test
 	public void testDatabase() {

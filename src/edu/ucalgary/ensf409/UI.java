@@ -201,9 +201,9 @@ public class UI {
 	 * Within this function, there will be a call to formatOrderRequest where that function
 	 * will properly format the results of the user's order in a well-formatted manner.
 	 * Once the formatted string has been return, to displayOrder, a new .txt will be 
-	 * created and the formatted string will be written in the file.
+	 * created and the formatted string will be written in the file. returns 1 if succesful, returns 0 if not.
 	 */
-	public void displayOrder() {
+	public boolean displayOrder() {
 		String toBePrinted = formatOrderRequest(); // receives bigString (formatted output of order request)
 		createFile();
 		try {
@@ -211,9 +211,11 @@ public class UI {
 			myWriter.write(toBePrinted);
 			myWriter.close();
 			System.out.println("Successfully wrote to the file.");
+			return true;
 		} catch (IOException e) {
-			System.out.println("An error occurred.");
+			System.out.println("An error occurred in writing the file.");
 			e.printStackTrace();
+			return false;
 		}
 	}
 
