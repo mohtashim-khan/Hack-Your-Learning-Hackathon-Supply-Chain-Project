@@ -1,3 +1,11 @@
+/**@author	Group 73 (Mackenzie,Mohtashim, Ritwik, Usman) <a>
+ *href="mailto:mohtashim.khan@ucalgary.ca">mohtashim.khan@ucalgary.ca</a>
+ *Project Manager: Mohtashim Khan
+ *@version 1.0
+ *@since 1.0
+ *
+ *Database class: handles all Database related stuff and instantiates the necessary Objects.
+ */
 package edu.ucalgary.ensf409;
 import java.sql.*;
 import java.util.ArrayList;
@@ -16,8 +24,17 @@ public class Database
 	private ArrayList<Lamp> lampList = new ArrayList<Lamp>();
 	private ArrayList<Filing> filingList = new ArrayList <Filing>();
 	
-    //Database's constructor, receives the URL, the Username, and the password to the database. Stores the required table and type requested.
-	// throws IllegalArguement exception if the selectedTable is not a part of the furniture classes
+    /**
+     * @param dBURL
+     * @param username
+     * @param password
+     * @param selectedType
+     * @param selectedTable
+     * @throws IllegalArgumentException
+     * Database's constructor, receives the URL, the Username, and the password to the database. Stores the required table and type requested.
+     * throws IllegalArguement exception if the selectedTable is not a part of the furniture classes
+     * 
+     */
     public Database(String dBURL, String username, String password, String selectedType, String selectedTable) throws IllegalArgumentException {
     	
     	DBURL = dBURL;
@@ -36,7 +53,10 @@ public class Database
 	}
     
     
-    //Initializes connection with the database based on provided URL, Username, and password
+    /**
+     * initConnection() Initializes connection with the database based on provided DBURL, Username, and password
+     * 
+     */
     public void initConnection()
     {
         
@@ -49,7 +69,12 @@ public class Database
     
     
     
-   //getData() calls the 
+    /**
+     * @return Object []
+     * @throws NullPointerException
+     * 
+     * getData() calls selectFromDB() where 
+     */
     public Object [] getData() throws NullPointerException
     {
     	selectFromDB();

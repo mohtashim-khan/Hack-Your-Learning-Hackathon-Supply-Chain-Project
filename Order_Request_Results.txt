@@ -2,11 +2,9 @@ Furniture Order Form
 
 Faculty Name: Schulich School of Engineering 
 Contact: ENSF 409 - Group #73
-Date: 2021/04/14 18:26:27
+Date: 2021/04/14 19:59:48
 
-Original Request: test chair,1
+Original Request: mesh chair,10
 
 Items Ordered :
-ID: test
-ID: test1
-Total Price: $200
+ORDER COULD NOT BE FULFILLED: Suggested Manufacturers are Fine Office Supplies, Chairs R Us, Fine Office Supplies, Chairs R Us, 

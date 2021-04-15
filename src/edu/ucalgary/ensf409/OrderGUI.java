@@ -270,7 +270,8 @@ public class OrderGUI extends JFrame implements ActionListener, MouseListener{
 		}
 		catch(DatabaseDeleteException e)
 		{
-			return "ORDER COULD NOT BE PROCESSED";
+			String returnString = "ORDER COULD NOT BE PROCESSED. Suggested Manufacturers are "+ newOrder.manuIDs();
+			return returnString;
 			
 		}
 		return newOrder.formatOrderRequest();
@@ -327,7 +328,7 @@ public class OrderGUI extends JFrame implements ActionListener, MouseListener{
         
         // NEED 1 MORE CHECK FOR VALID INT CONVERSION 
         
-        if(quantityDef.length()<1||quantityDef.contains(" ")||quantityDef.length()>2){
+        if(quantityDef.length()<1||quantityDef.contains(" ")||quantityDef.length()>2||!quantityDef.chars().allMatch(Character::isDigit)){
             allInputValid = false;
             JOptionPane.showMessageDialog(this, quantityDef + " is an invalid quantity input.");
         }

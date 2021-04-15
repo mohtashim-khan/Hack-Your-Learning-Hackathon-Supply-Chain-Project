@@ -53,7 +53,6 @@ public class UITest {
 			myStmt1.executeUpdate();
 			myStmt.close();
 			myStmt1.close();
-			//system.out.println("testProcessOrder: added test and test1!");
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -119,7 +118,6 @@ public class UITest {
 			myStmt1.executeUpdate();
 			myStmt.close();
 			myStmt1.close();
-			//system.out.println("testCalculateOrder: test1 and test added!");
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -171,7 +169,6 @@ public class UITest {
 			myStmt1.executeUpdate();
 			myStmt.close();
 			myStmt1.close();
-			//system.out.println("testDisplayOrder: test1 and test added!");
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();
@@ -215,10 +212,9 @@ public class UITest {
 			myStmt1.executeUpdate();
 			myStmt.close();
 			myStmt1.close();
-			//system.out.println("testDeleteUsedIDs: test1 and test added!");
 
 		} catch (SQLException ex) {
-			//system.out.println("testDeleteUsedIDs: test1 and test already added!");
+			ex.printStackTrace();
 		}
 
 		// Insert another two test entries into database
@@ -232,7 +228,6 @@ public class UITest {
 			myStmt1.executeUpdate();
 			myStmt.close();
 			myStmt1.close();
-			//system.out.println("testDeleteUsedIDs: test2 and test3 added!");
 
 		} catch (SQLException ex) {
 			ex.printStackTrace();

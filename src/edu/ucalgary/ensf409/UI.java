@@ -169,10 +169,10 @@ public class UI {
 	 * Once the calculation process has been completed, all furniture ID codes deemed to be the
 	 * cheapest combinations will be stored in the String [] usedIDs
 	 */
-	public void calculateOrder() {
+	public void calculateOrder() throws NumberFormatException {
 		CalculateCombinations findResults = new CalculateCombinations();// pass in Object []
-		int quanityNum = strToInt();
-		
+			int quanityNum = strToInt();
+			
 		// use if statements to generate all combos for furniture items
 		if (item.equals("chair")) {
 			findResults.findChairCombinations(sqlDataStorage, quanityNum);
@@ -263,7 +263,7 @@ public class UI {
 
 		bigString.append("Items Ordered :\n");
 		if (usedIDs == null) {
-			bigString.append("ORDER COULD NOT BE FULFILLED");
+			bigString.append("ORDER COULD NOT BE FULFILLED: Suggested Manufacturers are "+ manuIDs());
 		} else {
 			for (int i = 0; i < usedIDs.length; i++) {
 				bigString.append("ID: " + usedIDs[i] + "\n"); // need furniture code class to store codes
@@ -273,4 +273,62 @@ public class UI {
 		System.out.println(bigString.toString());
 		return bigString.toString();
 	}
+
+	public String manuIDs()
+	{
+		
+		String [] manufacturers= { "Academic Desks", "Office Furnishings","Chairs R Us","Furniture Goods","Fine Office Supplies"};
+		StringBuilder returnString = new StringBuilder();
+		int [] indexArray = new int [sqlDataStorage.length];
+		for(int i = 0; i<sqlDataStorage.length; i++ )
+		{
+			if(item.equals("chair"))
+			{
+				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
+			}
+			
+			if(item.equals("desk"))
+			{
+				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
+			}
+			
+			if(item.equals("filing"))
+			{
+				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
+			}
+			
+			if(item.equals("lamp"))
+			{
+				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
+			}
+			
+			
+		}
+		
+		removeDuplicateElements(indexArray, indexArray.length);
+		
+		for(int i = 0; i<indexArray.length; i++)
+		{
+			returnString.append(manufacturers[indexArray[i]-1]+", ");
+		}
+		
+		
+		return returnString.toString();
+	}
+	
+	private static int removeDuplicateElements(int arr[], int n){
+        if (n==0 || n==1){
+            return n;
+        }  
+        int j = 0;//for next element
+        for (int i=0; i < n-1; i++){
+            if (arr[i] != arr[i+1]){
+                arr[j++] = arr[i];
+            }
+        }
+        arr[j++] = arr[n-1];
+        return j;
+    }
+     
+
 }

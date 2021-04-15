@@ -23,7 +23,7 @@ public class DatabaseTest {
 	public void testDatabase() {
 		String expected = "Mohtashim";
 		Database test = new Database("jdbc:mysql://localhost/inventory", expected, "assignment9", "mesh", "chair");
-		assertEquals(expected,test.getUSERNAME());
+		assertEquals("Constructor does not assign the correct values!",expected,test.getUSERNAME());
 	}
 
 	/**
@@ -38,7 +38,7 @@ public class DatabaseTest {
 		check = test.getDbConnect();
 		
 		try {
-			assertTrue("Connection is open", check.isValid(0));
+			assertTrue("Connection is not open!", check.isValid(0));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -58,7 +58,7 @@ public class DatabaseTest {
 		Database test = new Database("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "mesh", "chair");
 		test.initConnection();
 		dataArray = test.getData();
-		assertEquals(expectedType, ((Chair) dataArray[0]).getType());
+		assertEquals("The resulting Type does not match the exisitng type!, getData error!",expectedType, ((Chair) dataArray[0]).getType());
 		
 	}
 	
