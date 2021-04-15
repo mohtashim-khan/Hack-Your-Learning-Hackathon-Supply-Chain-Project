@@ -108,7 +108,7 @@ public class CalculateCombinations {
 	 * Now if the locallist was a successful combination, it will add those "lamps" from the local list into winnerComb list so that we do not 
 	 * loose track of a winner
 	 *
-	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * Now that we have a winner, we add it to the allCombinations list which can be used to find the bestCombination later!
 	 * 
 	 * (Deeper Explanation)
 	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
@@ -150,14 +150,14 @@ public class CalculateCombinations {
 	
 	// This find<item>Combinations method is the driver class for recursion 
 	public void findChairCombinations (Object[] chairObjectList, int quantity) {
-        // Type cast the returned Object[] to the required Array List type
+         // Type cast the returned Object[] to the required Array List type
 		ArrayList<Chair> chairList = new ArrayList<>();
         for(int i = 0; i < chairObjectList.length; i++){
             chairList.add((Chair) chairObjectList[i]);                               
         }
 
 		//This locallist will contain all combinations that fullfill the order!
-        ArrayList<Chair> localList = new ArrayList<>();  
+        ArrayList<Chair> localList = new ArrayList<>();
 
         //starts the recursion
         bestChairCombination(0, 0, 0, 0, 0, quantity, localList, chairList);
@@ -180,7 +180,7 @@ public class CalculateCombinations {
 	 * Now if the locallist was a successful combination, it will add those "chairs" from the local list into winnerComb list so that we do not 
 	 * loose track of a winner
 	 *
-	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * Now that we have a winner, we add it to the allCombinations list which can be used to find the bestCombination later!
 	 * 
 	 * (Deeper Explanation)
 	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
@@ -253,7 +253,7 @@ public class CalculateCombinations {
 	 * Now if the locallist was a successful combination, it will add those "desks" from the local list into winnerComb list so that we do not 
 	 * loose track of a winner
 	 *
-	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * Now that we have a winner, we add it to the allCombinations list which can be used to find the bestCombination later!
 	 * 
 	 * (Deeper Explanation)
 	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
@@ -294,7 +294,7 @@ public class CalculateCombinations {
 
 
     // This find<item>Combinations method is the driver class for recursion
-	public void findFilingCombinations (Object[] filingObjList, int quantity) {
+	public void findFilingCombinations(Object[] filingObjList, int quantity) {
         // Type cast the returned Object[] to the required Array List type
         ArrayList<Filing> filingList = new ArrayList<>();
         for(int i = 0; i < filingObjList.length; i++){
@@ -324,7 +324,7 @@ public class CalculateCombinations {
 	 * Now if the locallist was a successful combination, it will add those "filings" from the local list into winnerComb list so that we do not 
 	 * loose track of a winner
 	 *
-	 * Now that we have a winner, we add it to the daddy list which is allCombinations!
+	 * Now that we have a winner, we add it to the allCombinations list which can be used to find the bestCombination later!
 	 * 
 	 * (Deeper Explanation)
 	 * We perform a backtracking recursive call that checks for potential winner combinations and loops through all possible 
@@ -364,3 +364,4 @@ public class CalculateCombinations {
         }
     }	
 }
+

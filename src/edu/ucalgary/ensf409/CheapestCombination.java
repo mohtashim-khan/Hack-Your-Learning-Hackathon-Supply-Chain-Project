@@ -19,30 +19,16 @@ public class CheapestCombination {
         }
     }
 
-    public void print() {
-        for (Furniture furniture : furnitureCombination) {
-            System.out.println(furniture.getiD());
-        }
-        System.out.println("Total Price: $" + totalPrice);
-    }
-
-    public String getFormat() {
-		StringBuilder ret = new StringBuilder();
-		for (Furniture furniture : furnitureCombination) {
-            ret.append("ID: " + furniture.getiD() + '\n');
-        }
-		ret.append("Total Price: " + totalPrice);
-		return ret.toString();
-	}
-    
+    //getter
     public ArrayList<Furniture> getFurnitureCombination(){
     	return this.furnitureCombination;
     }
     
+
+    //getter - sends String of userIDs for use by the UI and Database classes
     public String [] getIDs(){
     	String [] returnStringArray = new String [furnitureCombination.size()];
-    	for(int i = 0; i<furnitureCombination.size();i++)
-    	{
+    	for(int i = 0; i<furnitureCombination.size();i++){
     	returnStringArray[i] = furnitureCombination.get(i).getiD();
     	}
       	return returnStringArray;

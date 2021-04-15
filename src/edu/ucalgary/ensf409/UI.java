@@ -24,6 +24,9 @@ import java.io.IOException; // Import the IOException class to handle errors
 import java.io.FileWriter;
 import java.time.format.DateTimeFormatter;  
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
 
 
 public class UI {
@@ -274,12 +277,15 @@ public class UI {
 		return bigString.toString();
 	}
 
+	/**
+	 * @return String
+	 */
 	public String manuIDs()
 	{
 		
 		String [] manufacturers= { "Academic Desks", "Office Furnishings","Chairs R Us","Furniture Goods","Fine Office Supplies"};
 		StringBuilder returnString = new StringBuilder();
-		int [] indexArray = new int [sqlDataStorage.length];
+		Integer [] indexArray = new Integer [sqlDataStorage.length];
 		for(int i = 0; i<sqlDataStorage.length; i++ )
 		{
 			if(item.equals("chair"))
@@ -305,30 +311,18 @@ public class UI {
 			
 		}
 		
-		removeDuplicateElements(indexArray, indexArray.length);
+		LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>( Arrays.asList(indexArray) );
+		Integer[] indexArrayDup = linkedHashSet.toArray(new Integer[] {});
 		
-		for(int i = 0; i<indexArray.length; i++)
+		for(int i = 0; i<indexArrayDup.length; i++)
 		{
-			returnString.append(manufacturers[indexArray[i]-1]+", ");
+			returnString.append(manufacturers[indexArrayDup[i]-1]+", ");
 		}
 		
 		
 		return returnString.toString();
 	}
-	
-	private static int removeDuplicateElements(int arr[], int n){
-        if (n==0 || n==1){
-            return n;
-        }  
-        int j = 0;//for next element
-        for (int i=0; i < n-1; i++){
-            if (arr[i] != arr[i+1]){
-                arr[j++] = arr[i];
-            }
-        }
-        arr[j++] = arr[n-1];
-        return j;
-    }
+
      
 
 }
