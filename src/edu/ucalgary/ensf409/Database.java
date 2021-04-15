@@ -6,7 +6,11 @@
  *
  *Database class: handles all Database related stuff and instantiates the necessary Objects.
  */
+
+//package declaration
 package edu.ucalgary.ensf409;
+
+//import statements
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -54,7 +58,7 @@ public class Database
     
     
     /**
-     * initConnection() Initializes connection with the database based on provided DBURL, Username, and password
+     * initConnection() Initializes connection with the inventory database based on provided DBURL, Username, and password
      * 
      */
     public void initConnection()
@@ -73,7 +77,7 @@ public class Database
      * @return Object []
      * @throws NullPointerException
      * 
-     * getData() calls selectFromDB() where 
+     * getData() calls selectFromDB() and outputs an object array of the requested furniture object ArrayList
      */
     public Object [] getData() throws NullPointerException
     {
@@ -108,9 +112,10 @@ public class Database
     
 	
     
-    
-    //Extracts the required information from the database and populates the appropriate class ArrayList with the 
-    // required values.
+    /**
+	 * Extracts the required information from the database and populates the appropriate class ArrayList with the
+	 * required values
+	 */
     public void selectFromDB()
     {
     	try {                    
@@ -181,7 +186,10 @@ public class Database
     	
     }
     
-    //Deletes Database entry in the selected table based on provided iD
+    /**
+	 * @param id - deletes the database entry with this id
+	 * Deletes Database entry in the selected table based on provided iD
+	 */ 
     public void deleteDBEntry(String id)
     {
     	try {
@@ -193,9 +201,14 @@ public class Database
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-    	
     }
     
+	/**
+	 * 
+	 * @param query
+	 * @return 
+	 * @throws SQLException
+	 */
     public PreparedStatement sendQuery(String query) throws SQLException
     {
     	return dbConnect.prepareStatement(query);
@@ -203,7 +216,9 @@ public class Database
     
     
     
-    
+    /**
+	 * close method, for the ResultSet and the database connection. throws SQL exception if error is caught
+	 */
     public void closeProcess() {
         try {
             results.close();
@@ -213,6 +228,9 @@ public class Database
         }
     }
     
+	/**
+	 * close method, for the database connection. throws SQL exception if error is caught
+	 */
     public void closeDelete()
     {
     	try {
@@ -309,8 +327,4 @@ public class Database
 	public ArrayList<Filing> getFilingList() {
 		return filingList;
 	}
-
-	
-	
-
 }

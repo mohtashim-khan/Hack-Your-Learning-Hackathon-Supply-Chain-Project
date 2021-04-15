@@ -1,33 +1,38 @@
-/**
- * 
+/**@author	Group 73 (Mackenzie,Mohtashim, Ritwik, Usman) <a>
+ *href="mailto:mohtashim.khan@ucalgary.ca">mohtashim.khan@ucalgary.ca</a>
+ *Project Manager: Mohtashim Khan
+ *@version 1.0
+ *@since 1.0
+ *
+ *DatabaseTest class: handles all unit testing for the Database class
  */
-package edu.ucalgary.ensf409;
 
+
+//package declaration
+ package edu.ucalgary.ensf409;
+
+//import statements
 import static org.junit.Assert.*;
-
 import java.sql.*;
-
 import org.junit.Test;
 
-/**
- * @author moto_
- *
- */
+
 public class DatabaseTest {
 
 	/**
-	 * Test method for Database constructor.
-	 * tests if the constructor is working as intendend and is filling in all the right fields.
+	 * Test method for {@link edu.ucalgary.ensf409.Database#Database(java.lang.String, java.lang.String, java.lang.String, java.lang.String)}.
+	 * makes sure that the database is constructed properly
 	 */
 	@Test
 	public void testDatabase() {
 		String expected = "Mohtashim";
 		Database test = new Database("jdbc:mysql://localhost/inventory", expected, "assignment9", "mesh", "chair");
-		assertEquals("Constructor does not assign the correct values!",expected,test.getUSERNAME());
+		assertEquals(expected,test.getUSERNAME());
 	}
 
 	/**
 	 * Test method for {@link edu.ucalgary.ensf409.Database#initConnection()}.
+	 * tests if the program can initialize connection to the database
 	 */
 	@Test
 	public void testInitConnection() {
@@ -38,7 +43,7 @@ public class DatabaseTest {
 		check = test.getDbConnect();
 		
 		try {
-			assertTrue("Connection is not open!", check.isValid(0));
+			assertTrue("Connection is open", check.isValid(0));
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -49,6 +54,7 @@ public class DatabaseTest {
 
 	/**
 	 * Test method for {@link edu.ucalgary.ensf409.Database#testgetData()}.
+	 * tests the getData and selectFromDB method to ensure that the correct object array is output
 	 */
 	@Test
 	public void testgetData() {
@@ -58,12 +64,13 @@ public class DatabaseTest {
 		Database test = new Database("jdbc:mysql://localhost/inventory", "Mohtashim", "assignment9", "mesh", "chair");
 		test.initConnection();
 		dataArray = test.getData();
-		assertEquals("The resulting Type does not match the exisitng type!, getData error!",expectedType, ((Chair) dataArray[0]).getType());
+		assertEquals(expectedType, ((Chair) dataArray[0]).getType());
 		
 	}
 	
 	/**
 	 * Test method for {@link edu.ucalgary.ensf409.Database#testgetData()}.
+	 * tests the deleteDBEntry method to ensure that the entry is deleted from the database with the provided id
 	 */
 	@Test
 	public void testdeleteDBentry()
@@ -87,7 +94,7 @@ public class DatabaseTest {
 		initialArray = test.getData();
 		test.deleteDBEntry("test");
 		deletedEntryArray = test.getData();
-		assertNotEquals("Both arrays are identical, the entry was not deleted!",((Chair) deletedEntryArray[deletedEntryArray.length-1]).getiD(),((Chair) initialArray[initialArray.length-1]).getiD());
+		assertNotEquals(((Chair) deletedEntryArray[deletedEntryArray.length-1]).getiD(),((Chair) initialArray[initialArray.length-1]).getiD());
 		
 		
 	}

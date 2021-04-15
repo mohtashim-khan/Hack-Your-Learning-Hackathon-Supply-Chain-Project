@@ -320,7 +320,7 @@ public class UI {
 		}
 		
 		
-		return returnString.toString();
+		return returnString.toString().substring(0,returnString.length()-1);
 	}
 
      
