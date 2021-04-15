@@ -279,6 +279,8 @@ public class UI {
 
 	/**
 	 * @return String
+	 * 
+	 * manuIDs returns the manuiDs of all the manufacturers for a specfic item in a single string
 	 */
 	public String manuIDs()
 	{
@@ -288,6 +290,8 @@ public class UI {
 		Integer [] indexArray = new Integer [sqlDataStorage.length];
 		for(int i = 0; i<sqlDataStorage.length; i++ )
 		{
+			//Fill out manuIDs for each item
+			
 			if(item.equals("chair"))
 			{
 				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
@@ -295,31 +299,33 @@ public class UI {
 			
 			if(item.equals("desk"))
 			{
-				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
+				indexArray[i] = Integer.parseInt(((Desk) sqlDataStorage[i]).getManuID().substring(2));
 			}
 			
 			if(item.equals("filing"))
 			{
-				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
+				indexArray[i] = Integer.parseInt(((Filing) sqlDataStorage[i]).getManuID().substring(2));
 			}
 			
 			if(item.equals("lamp"))
 			{
-				indexArray[i] = Integer.parseInt(((Chair) sqlDataStorage[i]).getManuID().substring(2));
+				indexArray[i] = Integer.parseInt(((Lamp) sqlDataStorage[i]).getManuID().substring(2));
 			}
 			
 			
 		}
 		
+		//Remove duplicates from int array
 		LinkedHashSet<Integer> linkedHashSet = new LinkedHashSet<>( Arrays.asList(indexArray) );
 		Integer[] indexArrayDup = linkedHashSet.toArray(new Integer[] {});
 		
+		//Make manufacturer string
 		for(int i = 0; i<indexArrayDup.length; i++)
 		{
 			returnString.append(manufacturers[indexArrayDup[i]-1]+", ");
 		}
 		
-		
+		//return Manufacturer string
 		return returnString.toString().substring(0,returnString.length()-1);
 	}
 

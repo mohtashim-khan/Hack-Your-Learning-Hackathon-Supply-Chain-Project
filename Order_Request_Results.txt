@@ -2,12 +2,9 @@ Furniture Order Form
 
 Faculty Name: Schulich School of Engineering 
 Contact: ENSF 409 - Group #73
-Date: 2021/04/14 20:45:31
+Date: 2021/04/14 21:08:13
 
-Original Request: executive chair,1
+Original Request: desk lamp,99
 
 Items Ordered :
-ID: C2483
-ID: C5784
-ID: C7268
-Total Price: $400
+ORDER COULD NOT BE FULFILLED: Suggested Manufacturers are Fine Office Supplies, Furniture Goods,
