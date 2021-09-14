@@ -1,10 +1,6 @@
 # University Of Calgary Supply Chain Managment Java Application!
 
 
-
-[Check out our video demonstartion!](https://www.youtube.com/watch?v=hpz7GxqxEWc)
-
-
 ## Instructions for running and using our program:
 
 Step 1:
